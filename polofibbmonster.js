@@ -681,8 +681,32 @@ function collectionDo(collection, data, balances, btc){
 							//console.log('ds: ');
 							//console.log(ds);
 							if (doc3[d].trades.currencyPair){
-								
-								if (doc3[d].trades.bought1 == true && !ds.includes(doc3[d].trades.currencyPair)){
+								if (doc3[d].trades.buy2){
+								if (doc3[d].trades.bought1 == true && doc3[d].trades.bought2 == true && !ds.includes(doc3[d].trades.currencyPair)){
+									if (doc3[d].trades.bought1 == true){
+									console.log('bought1 and bought2 true');
+								}
+								if (!ds.includes(doc3[d].trades.currencyPair)){
+									console.log('ds no include ' + doc3[d].trades.currencyPair);
+									console.log(ds);
+								}
+									doc3[d].trades.bought1 = false;
+									doc3[d].trades.bought2 = false;
+									collection.update({
+									}, {
+										$set: {
+											"trades": doc3[d].trades
+										}
+									}, { multi: true },
+									function(err, result) {
+									   console.log(err);
+										console.log(result.result);
+									godobuy = true;
+															
+
+									});
+								}
+								} else if (doc3[d].trades.bought1 == true== true && !ds.includes(doc3[d].trades.currencyPair)){
 									if (doc3[d].trades.bought1 == true){
 									console.log('bought1 true');
 								}
