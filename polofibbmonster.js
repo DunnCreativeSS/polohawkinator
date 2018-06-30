@@ -496,6 +496,7 @@ MongoClient.connect(process.env.mongodb || mongodb, function(err, db) {
 });
 }, 10000);
  function dobuy(d3d, cc, amount){
+	 if (d3d.trades.bought1 == false){
 	 poloniex.buy(d3d.trades.currencyPair, parseFloat(d3d.trades.buy1).toFixed(8), amount.toFixed(8), 0, 0, 0 , function (err, data2){
 		 console.log(err)
 		console.log(data2);
@@ -505,9 +506,13 @@ MongoClient.connect(process.env.mongodb || mongodb, function(err, db) {
 
 	});
  });
+	 } else {
+		 console.log('bought1 true, why buy?');
+	 }
  }
 
  function dobuy2(d3d, cc, amount){
+	 if (d3d.trades.bought2 == false){
 	 poloniex.buy(d3d.trades.currencyPair, parseFloat(d3d.trades.buy2).toFixed(8), amount.toFixed(8), 0, 0, 0 , function (err, data2){
 		console.log(data2);
 		console.log(err);
@@ -518,6 +523,9 @@ MongoClient.connect(process.env.mongodb || mongodb, function(err, db) {
 
 	});
 	});
+	 } else {
+		 console.log('bought2 true, why buy?');
+	 }
  }
  var godobuy = true;
 function cancel(d3d, cc, balance){
