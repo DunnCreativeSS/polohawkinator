@@ -605,7 +605,7 @@ function doCollections(collections, balances){
 								if (data[d].length > 0){
 									for (var a in data[d]){
 										data[d][a].pair = d;
-										console.log(data[d][a].type);
+										//console.log(data[d][a].type);
 										if (data[d][a].type == "buy"){
 										data[d][a].currentBid = bestBid[data[d][a].pair];
 										var date = new Date(data[d][a].date).getTime() / 1000;
