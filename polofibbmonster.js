@@ -14,8 +14,8 @@ var path = require('path')
 var app = express()
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
 	function sortFunction3(a,b){  
-				var dateA = new Date(a.date).getTime();
-				var dateB = new Date(b.date).getTime();
+				var dateA = (a.percent);
+				var dateB = (b.percent);
 				return dateA < dateB ? 1 : -1;  
 			}; 
 var dorefresh = false;
@@ -341,7 +341,7 @@ poloniex.subscribe('ticker');
 						winnas.push(winners[p].currencyPair);
 											
 					
-					//insert(winners[p], collection);
+					insert(winners[p], collection);
 					}
 					updateStoplimits(winners[p], collection);
 							}
@@ -390,6 +390,7 @@ poloniex.subscribe('ticker');
  }
  
  function insert(wp, collection){
+	 console.log(wp);
 	 console.log('insert');
 	 collection.update({
 		'trades.currencyPair': wp.currencyPair
@@ -477,7 +478,7 @@ var collections = []
 setTimeout(function(){
 MongoClient.connect(process.env.mongodb || mongodb, function(err, db) {
 	console.log(err);
-    var dbo = db.db('polomonster138-ash')
+    var dbo = db.db('polomonster138-test123')
 	var count = 0;
     dbo.listCollections().toArray(function(err, collInfos) {
         // collInfos is an array of collection info objects that look like:
@@ -822,7 +823,7 @@ godobuy = false;
 var dbo;
 				MongoClient.connect(process.env.mongodb || mongodb, function(err, db) {
 					console.log(err);
-				dbo = db.db('polomonster138-ash')
+				dbo = db.db('polomonster138-test123')
 				////console.log('dbo');
 				
 				});
