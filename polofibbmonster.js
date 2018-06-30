@@ -714,7 +714,7 @@ function collectionDo(collection, data, balances, btc){
 
 									});
 								}
-								} else if (doc3[d].trades.bought1 == true== true && !ds.includes(doc3[d].trades.currencyPair)){
+								} else if (doc3[d].trades.bought1 == true && !ds.includes(doc3[d].trades.currencyPair)){
 									if (doc3[d].trades.bought1 == true){
 									console.log('bought1 true');
 								}
