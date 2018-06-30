@@ -118,7 +118,7 @@ function doget(req, res){
 								}
 								}
 							}
-							btcbal += parseFloat(balances.BTC);
+							btcbal = parseFloat(balances.BTC);
 							orders.sort(sortFunction2);
 							var ts = Math.round(new Date().getTime() / 1000) - 1000;
 							var tsYesterday = ts - (24 * 3600) - 1000;
@@ -160,7 +160,7 @@ function doget(req, res){
 		thetotal = thetotal * Math.pow(10, 8);
 		res.send('<head><link rel="icon" href="https://polofibbmonster.herokuapp.com/favicon.ico?v=2" /><meta http-equiv="refresh" content="36"><script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script></head><h1>Don\'t Panic! If the data seems off, wait a minute or so.</h1>'
 		+ 'current time: ' + new Date()
-		+ '<br>BTC Balance (including open orders if sold at current bid): ' + btcbal + '<br>'
+		+ '<br>BTC Balance: ' + btcbal + '<br>'
 		+ 'minutes: ' + minutes + '<br>'
 		+ 'hours: ' + hours + '<br>'
 		+ 'percent: ' + percent + '%<br>'
