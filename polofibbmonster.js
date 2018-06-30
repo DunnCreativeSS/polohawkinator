@@ -120,7 +120,7 @@ function doget(req, res){
 								}
 							}
 							btcbal = parseFloat(balances.BTC);
-							orders.sort(sortFunction2);
+							orders.sort(sortFunction);
 							var ts = Math.round(new Date().getTime() / 1000) - 1000;
 							var tsYesterday = ts - (24 * 3600) - 1000;
 							var trades = []
@@ -150,7 +150,7 @@ function doget(req, res){
 					var hours = ((diff2/1000)/60 / 60).toFixed(8);
 					var percentHr = (percent / hours).toFixed(4);
 							//////console.log(balances.BTC);
-							trades.sort(sortFunction3);
+							trades.sort(sortFunction);
 							stoplimits.sort(sortFunction);
 		//////console.log(stoplimits);
 		console.log((totals).toString());
