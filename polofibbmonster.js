@@ -4,7 +4,7 @@ var MongoClient = require('mongodb').MongoClient;
 let poloniex
 				var bestAsk = []
 				var bestBid = []
-poloniex = new Poloniex('70I6ABA8-69HS4C5S-Q7OT8P2T-6WXK4ZT1', process.env.apikey2 , { socketTimeout: 130000, nonce: () => new Date().getTime() * 1000 + 5000});
+poloniex = new Poloniex('WDMVHRJM-9VX7U8WU-ERQDXDFE-W9SY5U7R', process.env.apikey2 , { socketTimeout: 130000, nonce: () => new Date().getTime() * 1000 + 5000});
 var mongodb = "";
 const express = require('express');
 var startDate = new Date('2018/06/29 22:08')
@@ -337,7 +337,7 @@ poloniex.subscribe('ticker');
 						winnas.push(winners[p].currencyPair);
 											
 					
-					//insert(winners[p], collection);
+					insert(winners[p], collection);
 					}
 					updateStoplimits(winners[p], collection);
 							}
@@ -473,7 +473,7 @@ var collections = []
 setTimeout(function(){
 MongoClient.connect(process.env.mongodb || mongodb, function(err, db) {
 	console.log(err);
-    var dbo = db.db('polomonster138-333')
+    var dbo = db.db('polomonster138-ash')
 	var count = 0;
     dbo.listCollections().toArray(function(err, collInfos) {
         // collInfos is an array of collection info objects that look like:
@@ -627,7 +627,7 @@ function doCollections(collections, balances){
         } else {
             //////console.log(balances.BTC);
 			
-			var btc = parseFloat(balances.BTC) / 16;
+			var btc = parseFloat(balances.BTC) / 32;
 			if (btc < 0.0001){
 				btc = 0.0001;
 			}
@@ -775,7 +775,7 @@ godobuy = false;
 var dbo;
 				MongoClient.connect(process.env.mongodb || mongodb, function(err, db) {
 					console.log(err);
-				dbo = db.db('polomonster138-333')
+				dbo = db.db('polomonster138-ash')
 				////console.log('dbo');
 				
 				});
