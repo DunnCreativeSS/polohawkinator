@@ -7,7 +7,7 @@ let poloniex
 poloniex = new Poloniex('WDMVHRJM-9VX7U8WU-ERQDXDFE-W9SY5U7R', process.env.apikey2 , { socketTimeout: 130000, nonce: () => new Date().getTime() * 1000 + 5000});
 var mongodb = "";
 const express = require('express');
-var startDate = new Date('2018/06/29 22:08')
+var startDate = new Date('2018/06/30 01:58')
 var favicon = require('serve-favicon')
 var path = require('path')
  var startBtc = 0.0064699346521278; //0.00796575 
@@ -607,11 +607,18 @@ function doCollections(collections, balances){
 										data[d][a].pair = d;
 										data[d][a].currentBid = bestBid[data[d][a].pair];
 										var date = new Date(data[d][a].date).getTime() / 1000;
-											console.log(date);
-										if (date <= tsHour){
+											//console.log(date); 
+										var date2 = startDate.getTime() / 1000;
+										if (date <= tsHour && date >= date2){
+											console.log(parseFloat(data[d][a].orderNumber));
+											console.log('cancel cancel!');
+											/*
+											
 											poloniex.cancelOrder(parseFloat(data[d][a].orderNumber), function(data){
 												console.log('cancelled');
 											});
+											
+											*/
 										}
 									}
 								}
