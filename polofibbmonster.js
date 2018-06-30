@@ -126,7 +126,7 @@ function doget(req, res){
 							var trades = []
 							poloniex.returnMyTradeHistory('all', (startDate.getTime() / 1000), ts, 200, function(err, data) {
 								console.log(err);
-								console.log(data);
+								//console.log(data);
 								var ccc = 0;
 							for (var d in data){
 							totals.push({'pair': d, 'total': 0});
