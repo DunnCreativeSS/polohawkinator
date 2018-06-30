@@ -123,9 +123,9 @@ function doget(req, res){
 							var ts = Math.round(new Date().getTime() / 1000) - 1000;
 							var tsYesterday = ts - (24 * 3600) - 1000;
 							var trades = []
-							poloniex.returnMyTradeHistory('all', 1530313028, ts, 200, function(err, data) {
+							poloniex.returnMyTradeHistory('all', tsYesterday, ts, 200, function(err, data) {
 								console.log(err);
-								//console.log(data);
+								console.log(data);
 								var ccc = 0;
 							for (var d in data){
 							totals.push({'pair': d, 'total': 0});
@@ -612,13 +612,13 @@ function doCollections(collections, balances){
 										if (date <= tsHour && date >= date2){
 											console.log(parseFloat(data[d][a].orderNumber));
 											console.log('cancel cancel!');
-											/*
+											
 											
 											poloniex.cancelOrder(parseFloat(data[d][a].orderNumber), function(data){
 												console.log('cancelled');
 											});
 											
-											*/
+											
 										}
 									}
 								}
