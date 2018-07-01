@@ -341,7 +341,7 @@ poloniex.subscribe('ticker');
 						winnas.push(winners[p].currencyPair);
 											
 					
-					insert(winners[p], collection);
+					//insert(winners[p], collection);
 					}
 					updateStoplimits(winners[p], collection);
 							}
@@ -400,7 +400,7 @@ poloniex.subscribe('ticker');
 	},
 	function(err, result) {
 
-		if (err) //console.log(err);
+		if (err) console.log(err);
 		if (result.result.nModified == 0) {
 			
 			collection.insertOne({
