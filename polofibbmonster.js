@@ -12,7 +12,7 @@ const express = require('express');
 var startDate = new Date('2018/07/01 22:28')
 var favicon = require('serve-favicon')
 var path = require('path')
- var startBtc = 1695024.999999999; //0.00796575 
+ var startBtc = 1015528.9999999988; //0.00796575 
  var startBtcliq =1592041.1740321894; //0.00796575 
 var app = express()
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
@@ -784,7 +784,7 @@ var orders = []
 		console.log(err);
 		var collection =dbo.collection( 'orders' )
 			collection.insertOne({
-				'onk': parseFloat(data2.orderNumber)
+				'on': parseFloat(data2.orderNumber)
 			}, function(err, res) {
 				if (err) console.log(err);
 				
@@ -792,6 +792,7 @@ var orders = []
 			}); 
 		poloniex.sell(d3d.trades.currencyPair, parseFloat(d3d.trades.sell2).toFixed(8), (amount * .998).toFixed(8), 0, 0, 0 , function (err, data3){
 			//console.log(data3);
+			console.log(err);
 			var collection =dbo.collection( 'orders' )
 			collection.insertOne({
 				'on': parseFloat(data3.orderNumber)
@@ -800,7 +801,6 @@ var orders = []
 				
 			  ////console.log(res.result);
 			}); 
-			console.log(err);
 			
 
 	});
