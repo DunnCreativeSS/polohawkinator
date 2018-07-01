@@ -7,10 +7,11 @@ let poloniex
 poloniex = new Poloniex('WDMVHRJM-9VX7U8WU-ERQDXDFE-W9SY5U7R', process.env.apikey2 , { socketTimeout: 130000, nonce: () => new Date().getTime() * 1000 + 5000});
 var mongodb = "";
 const express = require('express');
-var startDate = new Date('2018/06/30 01:58')
+var startDate = new Date('2018/06/31 23:58')
 var favicon = require('serve-favicon')
 var path = require('path')
- var startBtc = 0.0855; //0.00796575 
+ var startBtc = 1695024.999999999; //0.00796575 
+ var startBtcliq =1592041.1740321894; //0.00796575 
 var app = express()
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
 	function sortFunction3(a,b){  
@@ -205,11 +206,7 @@ collection.find({
 							for (var d in tradesd){
 							tradesdupdate(tradesd[d], collection)
 							}
-							var percent =  (100 * (-1 * (1 - (btcbal / startBtc)))).toFixed(4);
-					var diff2 = Math.abs(new Date() - startDate);
-					var minutes = Math.floor((diff2/1000)/60);
-					var hours = ((diff2/1000)/60 / 60).toFixed(8);
-					var percentHr = (percent / hours).toFixed(4);
+							
 							//console.log(balances.BTC);
 							trades.sort(sortFunction3);
 							stoplimits.sort(sortFunction);
@@ -236,18 +233,27 @@ ttotal = ttotal + 0.00494003
 		thetotal = thetotal * Math.pow(10, 8);
 		tradetotal = tradetotal * Math.pow(10, 8);
 		ttotal = ttotal * Math.pow(10, 8);
+		var percent =  (100 * (-1 * (1 - (( ttotal + tradetotal) / startBtc)))).toFixed(4);
+		var diff2 = Math.abs(new Date() - startDate);
+		var minutes = Math.floor((diff2/1000)/60);
+		var hours = ((diff2/1000)/60 / 60).toFixed(8);
+		var percentHr = (percent / hours).toFixed(4);
+		var percent2 =  (100 * (-1 * (1 - (( thetotal + tradetotal) / startBtcliq)))).toFixed(4);
+		var percentHr2 = (percent / hours).toFixed(4);
 		res.send('<head><link rel="icon" href="https://polofibbmonster.herokuapp.com/favicon.ico?v=2" /><meta http-equiv="refresh" content="36"><script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script></head><h1>Don\'t Panic! If the data seems off, wait a minute or so.</h1>'
 		+ 'current time: ' + new Date()
 		+ '<br>BTC Balance: ' + btcbal + '<br>'
 		+ 'minutes: ' + minutes + '<br>'
 		+ 'hours: ' + hours + '<br>'
-		+ 'percent: ' + percent + '%<br>'
-		+ '<h1>percent/hr: ' + percentHr + '%</h1>'
 		+ '<h1>total gains actually sold or bought (closed) (sats): ' + tradetotal + '</h1>'
 		+ '<h1>total gains if sold at our asking rate (sats): ' + ttotal + '</h1>'
 		+ '<h1>unrealized potential gains (sats): ' +( ttotal + tradetotal) + '</h1>'
+		+ 'percent: ' + percent + '%<br>'
+		+ '<h1>percent/hr: ' + percentHr + '%</h1>'
 		+ '<h1>total gains if sold at current bid/ask (sats): ' + thetotal + '</h1>'
 		+ '<h1>unrealized gains if liquidated (sats): ' + ( thetotal + tradetotal) + '</h1>'
+		+ 'percent: ' + percent2 + '%<br>'
+		+ '<h1>percent/hr: ' + percentHr2 + '%</h1>'
 		+ '<div style="display:none;" id="stoplimits">' + JSON.stringify(stoplimits) + '</div>'
 		+ '<div style="display:none;" id="orders">' + JSON.stringify(orders) + '</div>'
 		+ '<div style="display:none;" id="trades">' + JSON.stringify(trades) + '</div>'
