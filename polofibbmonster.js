@@ -123,7 +123,7 @@ collection.find({
 					for (var d in doc3){
 						ons.push(doc3[d].on);
 					}
-				
+							var ttotal = 0;
 							poloniex.returnOpenOrders('all', function(err, data) {
 								
 							for (var d in data){
@@ -144,7 +144,7 @@ collection.find({
 											}
 											else {
 										thetotal += (parseFloat(data[d][a].total))
-
+										ttotal += (parseFloat(data[d][a].total))
 											}
 										} else{
 																						if ((parseFloat(data[d][a].amount) * parseFloat(bestAsk[data[d][a].pair]))){
@@ -153,6 +153,7 @@ collection.find({
 																						}
 																						else {
 									     thetotal = thetotal - (parseFloat(data[d][a].total))
+										 ttotal = ttotal - (parseFloat(data[d][a].total))
 																						}
 										}
 									}
@@ -215,6 +216,7 @@ collection.find({
 		var tradetotal = 0;
 		for (var t in totals){
 			thetotal+=totals[t].total;
+			ttotal += totals[t].total;
 		}for (var t in totals){
 			tradetotal+=totals[t].total;
 		}
@@ -224,10 +226,14 @@ thetotal = thetotal + 0.00494003
 		tradetotal = tradetotal + 0.01355211
 tradetotal = tradetotal + 0.00074247
 tradetotal = tradetotal + 0.00494003
+		ttotal = ttotal + 0.01355211
+ttotal = ttotal + 0.00074247
+ttotal = ttotal + 0.00494003
 		if (gosend == true){
 			gosend = false;
 		thetotal = thetotal * Math.pow(10, 8);
 		tradetotal = tradetotal * Math.pow(10, 8);
+		ttotal = ttotal * Math.pow(10, 8);
 		res.send('<head><link rel="icon" href="https://polofibbmonster.herokuapp.com/favicon.ico?v=2" /><meta http-equiv="refresh" content="36"><script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script></head><h1>Don\'t Panic! If the data seems off, wait a minute or so.</h1>'
 		+ 'current time: ' + new Date()
 		+ '<br>BTC Balance: ' + btcbal + '<br>'
@@ -235,8 +241,9 @@ tradetotal = tradetotal + 0.00494003
 		+ 'hours: ' + hours + '<br>'
 		+ 'percent: ' + percent + '%<br>'
 		+ '<h1>percent/hr: ' + percentHr + '%</h1>'
+		+ '<h1>total gains if sold at our asking rate (closed) (sats): ' + ttotal + '</h1>'
 		+ '<h1>total gains actually sold or bought (closed) (sats): ' + tradetotal + '</h1>'
-		+ '<h1>total gains (sats): ' + thetotal + '</h1>'
+		+ '<h1>total gains if sold at current bid/ask (sats): ' + thetotal + '</h1>'
 		+ '<div style="display:none;" id="stoplimits">' + JSON.stringify(stoplimits) + '</div>'
 		+ '<div style="display:none;" id="orders">' + JSON.stringify(orders) + '</div>'
 		+ '<div style="display:none;" id="trades">' + JSON.stringify(trades) + '</div>'
