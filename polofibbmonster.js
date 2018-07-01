@@ -109,6 +109,7 @@ function doget(req, res){
 							var totals = []
 							var btcbal = 0;
 							var orders = []
+		var thetotal = 0;
 							poloniex.returnOpenOrders('all', function(err, data) {
 								
 							for (var d in data){
@@ -119,7 +120,25 @@ function doget(req, res){
 										data[d][a].currentBid = bestBid[data[d][a].pair];
 										data[d][a].percent = (parseFloat(data[d][a].currentBid) / parseFloat(data[d][a].rate));
 										orders.push(data[d][a]);
-										btcbal += (parseFloat(data[d][a].amount) * parseFloat(bestBid[data[d][a].pair]))
+										console.log(thetotal);
+										console.log(data[d][a].type );
+										if (data[d][a].type == 'sell'){
+											if ((parseFloat(data[d][a].amount) * parseFloat(bestBid[data[d][a].pair]))){
+										thetotal += (parseFloat(data[d][a].amount) * parseFloat(bestBid[data[d][a].pair]))
+											}
+											else {
+										thetotal += (parseFloat(data[d][a].total))
+
+											}
+										} else{
+																						if ((parseFloat(data[d][a].amount) * parseFloat(bestAsk[data[d][a].pair]))){
+
+									     thetotal = thetotal - (parseFloat(data[d][a].amount) * parseFloat(bestAsk[data[d][a].pair]))
+																						}
+																						else {
+									     thetotal = thetotal - (parseFloat(data[d][a].total))
+																						}
+										}
 									}
 								}
 								}
@@ -176,7 +195,6 @@ function doget(req, res){
 							stoplimits.sort(sortFunction);
 		//console.log(stoplimits);
 		//console.log((totals).toString());
-		var thetotal = 0;
 		for (var t in totals){
 			thetotal+=totals[t].total;
 		}
