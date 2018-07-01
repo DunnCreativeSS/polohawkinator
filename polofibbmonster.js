@@ -270,7 +270,7 @@ function tradesdupdate(tradesd,collection){
 			{
 						if(doc3[d].email != JSON.stringify(tradesd)){
 							console.log('dif');
-										sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+													const sgMail = require('@sendgrid/mail');
 
 							sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 							const msg = {
