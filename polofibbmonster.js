@@ -110,12 +110,28 @@ function doget(req, res){
 							var btcbal = 0;
 							var orders = []
 		var thetotal = 0;
+		var ons = []
+					var collection =dbo.collection( 'orders' )
+collection.find({
+
+                }, {
+                    $exists: true
+                }).sort({
+                    _id: -1
+
+                }).toArray(function(err, doc3) {
+					for (var d in doc3){
+						ons.push(doc3[d].on);
+					}
+				
 							poloniex.returnOpenOrders('all', function(err, data) {
 								
 							for (var d in data){
 								if (d.substr(0, d.indexOf('_')) == 'BTC'){
 								if (data[d].length > 0){
 									for (var a in data[d]){
+										
+										if (ons.includes(parseFloat(data[d][a].orderNumber))){
 										data[d][a].pair = d;
 										data[d][a].currentBid = bestBid[data[d][a].pair];
 										data[d][a].percent = (parseFloat(data[d][a].currentBid) / parseFloat(data[d][a].rate));
@@ -139,6 +155,7 @@ function doget(req, res){
 									     thetotal = thetotal - (parseFloat(data[d][a].total))
 																						}
 										}
+									}
 									}
 								}
 								}
@@ -222,11 +239,12 @@ function doget(req, res){
 							
 							}});
 							});
+						});
 						}
+					
 					});
 					}
-					});
-		
+					})
 		}
 	});
 	}catch(err){
@@ -598,11 +616,23 @@ poloniex.subscribe('ticker');
  var msgcount = 0;
 var dbs = []
 var collections = []
+var outstandingorders = [181053472317, 181053518271, 53366865899, 158516233209, 217000310643, 180752391725, 52512397220, 35115385656, 158517313128, 181315486041, 180989899979, 217326754872, 217326782844, 48276446391, 468130773775, 282343100388, 282305209317, 217357883712]
 setTimeout(function(){
 MongoClient.connect(process.env.mongodb || mongodb, function(err, db) {
 	console.log(err);
     var dbo = db.db('polomonster138-test21112322')
-	var count = 0;
+	var count = 0; //insert( 
+	/*
+	var collection =dbo.collection( 'orders' )
+	for (var d in outstandingorders){
+			collection.insertOne({
+				'on': outstandingorders[d]
+			}, function(err, res) {
+				if (err) console.log(err);
+				
+			  console.log(res.result);
+			}); 
+	} */
 					poloniex.returnOpenOrders('all', function(err, data) {
 
     dbo.listCollections().toArray(function(err, collInfos) {
@@ -692,20 +722,54 @@ MongoClient.connect(process.env.mongodb || mongodb, function(err, db) {
 	 poloniex.buy(d3d.trades.currencyPair, parseFloat(d3d.trades.buy1).toFixed(8), amount.toFixed(8), 0, 0, 0 , function (err, data2){
 		 console.log(err)
 		console.log(data2);
+		var collection =dbo.collection( 'orders' )
+			collection.insertOne({
+				'on': parseFloat(data2.orderNumber)
+			}, function(err, res) {
+				if (err) console.log(err);
+				
+			  //console.log(res.result);
+			}); 
 		poloniex.sell(d3d.trades.currencyPair, parseFloat(d3d.trades.sell1).toFixed(8), (amount * .998).toFixed(8), 0, 0, 0 , function (err, data3){
 		console.log(data3);
 		console.log(err);
+		var collection =dbo.collection( 'orders' )
+			collection.insertOne({
+				'on': parseFloat(data3.orderNumber)
+			}, function(err, res) {
+				if (err) console.log(err);
+				
+			  //console.log(res.result);
+			}); 
 
 	});
  });
  }
+var orders = []
+
 
  function dobuy2(d3d, cc, amount){
 	 poloniex.buy(d3d.trades.currencyPair, parseFloat(d3d.trades.buy2).toFixed(8), amount.toFixed(8), 0, 0, 0 , function (err, data2){
 		console.log(data2);
 		console.log(err);
+		var collection =dbo.collection( 'orders' )
+			collection.insertOne({
+				'onk': parseFloat(data2.orderNumber)
+			}, function(err, res) {
+				if (err) console.log(err);
+				
+			  //console.log(res.result);
+			}); 
 		poloniex.sell(d3d.trades.currencyPair, parseFloat(d3d.trades.sell2).toFixed(8), (amount * .998).toFixed(8), 0, 0, 0 , function (err, data3){
 			console.log(data3);
+			var collection =dbo.collection( 'orders' )
+			collection.insertOne({
+				'on': parseFloat(data3.orderNumber)
+			}, function(err, res) {
+				if (err) console.log(err);
+				
+			  //console.log(res.result);
+			}); 
 			console.log(err);
 			
 
