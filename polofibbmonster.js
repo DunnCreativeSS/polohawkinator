@@ -270,6 +270,8 @@ function tradesdupdate(tradesd,collection){
 			{
 						if(doc3[d].email != JSON.stringify(tradesd)){
 							console.log('dif');
+										sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
 							sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 							const msg = {
 							to: 'inspectorashtonhawke@live.com, jarettrsdunn@gmail.com',
