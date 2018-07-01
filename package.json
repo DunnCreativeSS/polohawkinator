@@ -17,6 +17,8 @@
     "sendgrid": "^5.2.3",
     "sendgrid-nodejs": "0.1.0-2",
     "serve-favicon": "*",
+	"sendgrid": "*",
+	"@sendgrid/mail": "*",
     "trendyways": "^0.4.2"
   },
   "scripts": {
