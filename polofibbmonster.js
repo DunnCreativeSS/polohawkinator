@@ -212,22 +212,30 @@ collection.find({
 							stoplimits.sort(sortFunction);
 		//console.log(stoplimits);
 		//console.log((totals).toString());
+		var tradetotal = 0;
 		for (var t in totals){
 			thetotal+=totals[t].total;
+		}for (var t in totals){
+			tradetotal+=totals[t].total;
 		}
 		thetotal = thetotal + 0.01355211
 thetotal = thetotal + 0.00074247
 thetotal = thetotal + 0.00494003
+		tradetotal = tradetotal + 0.01355211
+tradetotal = tradetotal + 0.00074247
+tradetotal = tradetotal + 0.00494003
 		if (gosend == true){
 			gosend = false;
 		thetotal = thetotal * Math.pow(10, 8);
+		tradetotal = tradetotal * Math.pow(10, 8);
 		res.send('<head><link rel="icon" href="https://polofibbmonster.herokuapp.com/favicon.ico?v=2" /><meta http-equiv="refresh" content="36"><script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script></head><h1>Don\'t Panic! If the data seems off, wait a minute or so.</h1>'
 		+ 'current time: ' + new Date()
 		+ '<br>BTC Balance: ' + btcbal + '<br>'
 		+ 'minutes: ' + minutes + '<br>'
 		+ 'hours: ' + hours + '<br>'
 		+ 'percent: ' + percent + '%<br>'
-		+ '<h1>percent/hr: ' + percentHr + '%</h1><br>'
+		+ '<h1>percent/hr: ' + percentHr + '%</h1>'
+		+ '<h1>total gains actually sold or bought (closed) (sats): ' + tradetotal + '</h1>'
 		+ '<h1>total gains (sats): ' + thetotal + '</h1>'
 		+ '<div style="display:none;" id="stoplimits">' + JSON.stringify(stoplimits) + '</div>'
 		+ '<div style="display:none;" id="orders">' + JSON.stringify(orders) + '</div>'
