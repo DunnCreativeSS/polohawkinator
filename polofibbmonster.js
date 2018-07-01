@@ -41,8 +41,10 @@ function sortFunction(a,b){
 	var dateB = (b.percent);
 	return dateA > dateB ? 1 : -1;  
 }; 
+							var tradesd = []
 function doget(req, res){
 	try{
+		tradesd = []
 		var gosend = true;
 	stoplimits = []
 		orders = []
@@ -57,7 +59,7 @@ function doget(req, res){
             dbs.push(collInfos[col].name);
             collections.push(dbo.collection(collInfos[col].name));
         }
-        //console.log(dbs);
+        console.log(dbs);
 		for (var c in collections){
 			var collection = collections[c];
                 collection.find({
@@ -142,10 +144,27 @@ function doget(req, res){
 											totals[ccc].total = totals[ccc].total - parseFloat(data[d][a].total);
 										}
 										trades.push(data[d][a]);
+													 
 									
+													
 									}
 								}
 								ccc++;
+							
+							}
+							for (var d in trades){
+								tradesd[trades[d].pair] = undefined;
+							}
+							for (var d in trades){
+								if (tradesd[trades[d].pair] ==undefined){
+									tradesd[trades[d].pair] = [];
+								}
+								console.log(trades[d].pair);
+								var collection = dbo.collection(trades[d].pair);
+									tradesd[trades[d].pair].push(trades[d]);
+							}
+							for (var d in tradesd){
+							tradesdupdate(tradesd[d], collection)
 							}
 							var percent =  (100 * (-1 * (1 - (btcbal / startBtc)))).toFixed(4);
 					var diff2 = Math.abs(new Date() - startDate);
@@ -195,6 +214,87 @@ function doget(req, res){
 	}catch(err){
 		res.send(err);
 	}
+}
+function tradesdupdate(tradesd,collection){
+
+	 collection.update({
+	},{ $set:{
+		'tradessaved': tradesd
+	}
+	},
+	function(err, result) {
+		console.log(result.result);
+		if (err) console.log(err);
+		if (result.result.nModified == 0) {
+			 
+			/* insert(
+			collection.insertOne({
+				'tradessaved': tradesd
+			}, function(err, res) {
+				if (err) console.log(err);
+				//console.log(res.result);
+			});
+			*/
+			
+		}
+		else {
+			 collection.find({
+					'email' : JSON.stringify(tradesd)
+                }, {
+                }).sort({
+                    _id: -1
+
+                }).toArray(function(err, doc3) {
+					console.log(doc3.length);
+					if (doc3.length == 0){
+						console.log('doc3 length 0 ');
+						const sgMail = require('@sendgrid/mail');
+			sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+			const msg = {
+			to: 'inspectorashtonhawke@live.com, jarettrsdunn@gmail.com',
+			from: 'jarettrsdunn@gmail.com',
+			subject: 'New Trade!',
+			text: JSON.stringify(tradesd),
+			html: JSON.stringify(tradesd)
+			};
+				collection.insertOne({
+				'email': JSON.stringify(tradesd)
+			}, function(err, res) {
+				if (err) console.log(err);
+				//console.log(res.result);
+			});
+			sgMail.send(msg);
+			console.log(msg);
+					}
+					for (var d in doc3)
+			{
+						if(doc3[d].email != JSON.stringify(tradesd)){
+							console.log('dif');
+							sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+							const msg = {
+							to: 'inspectorashtonhawke@live.com, jarettrsdunn@gmail.com',
+							from: 'jarettrsdunn@gmail.com',
+							subject: 'New Trade!',
+							text: JSON.stringify(tradesd),
+							html: JSON.stringify(tradesd)
+							};
+							if (doc3[d].email != JSON.stringify(tradesd)){
+							collection.insertOne({
+								'email': JSON.stringify(tradesd)
+							}, function(err, res) {
+								if (err) console.log(err);
+								//console.log(res.result);
+							});
+							sgMail.send(msg);
+						}
+			
+					}else {
+						console.log('same');
+					}
+					}
+				});
+		}
+	})
 }
 app.get('/', function(req, res) {
 	try {
@@ -481,7 +581,7 @@ var collections = []
 setTimeout(function(){
 MongoClient.connect(process.env.mongodb || mongodb, function(err, db) {
 	console.log(err);
-    var dbo = db.db('polomonster138-test1112322')
+    var dbo = db.db('polomonster138-test21112322')
 	var count = 0;
 					poloniex.returnOpenOrders('all', function(err, data) {
 
@@ -862,7 +962,7 @@ godobuy = false;
 var dbo;
 				MongoClient.connect(process.env.mongodb || mongodb, function(err, db) {
 					console.log(err);
-				dbo = db.db('polomonster138-test1112322')
+				dbo = db.db('polomonster138-test21112322')
 				//console.log('dbo');
 				
 				});
