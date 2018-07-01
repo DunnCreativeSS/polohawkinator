@@ -14,8 +14,8 @@ var path = require('path')
 var app = express()
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
 	function sortFunction3(a,b){  
-				var dateA = (a.percent);
-				var dateB = (b.percent);
+				var dateA = new Date(a.date).getTime();
+				var dateB = new Date(b.date).getTime();
 				return dateA < dateB ? 1 : -1;  
 			}; 
 var dorefresh = false;
@@ -32,8 +32,8 @@ app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
 		var orders = []
 		var count = 0;
 function sortFunction2(a,b){  
-	var dateA = new Date(a.date).getTime();
-	var dateB = new Date(b.date).getTime();
+	var dateA = (a.percent)
+	var dateB = (b.percent)
 	return dateA < dateB ? 1 : -1;  
 }; 
 function sortFunction(a,b){  
@@ -120,7 +120,7 @@ function doget(req, res){
 								}
 							}
 							btcbal = parseFloat(balances.BTC);
-							orders.sort(sortFunction);
+							orders.sort(sortFunction2);
 							var ts = Math.round(new Date().getTime() / 1000) - 1000;
 							var tsYesterday = ts - (24 * 3600) - 1000;
 							var trades = []
@@ -150,7 +150,7 @@ function doget(req, res){
 					var hours = ((diff2/1000)/60 / 60).toFixed(8);
 					var percentHr = (percent / hours).toFixed(4);
 							//////console.log(balances.BTC);
-							trades.sort(sortFunction);
+							trades.sort(sortFunction3);
 							stoplimits.sort(sortFunction);
 		//////console.log(stoplimits);
 		console.log((totals).toString());
