@@ -140,6 +140,7 @@ collection.find({
 										data[d][a].pair = d;
 										data[d][a].currentBid = bestBid[data[d][a].pair];
 										data[d][a].percent = (parseFloat(data[d][a].currentBid) / parseFloat(data[d][a].rate));
+										data[d][a].sats = (data[d][a].rate - data[d][a].currentBid) * Math.pow(10, 8);
 										orders.push(data[d][a]);
 										//console.log(thetotal);
 										//console.log(data[d][a].type );
