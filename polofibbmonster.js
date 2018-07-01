@@ -57,7 +57,7 @@ function doget(req, res){
             dbs.push(collInfos[col].name);
             collections.push(dbo.collection(collInfos[col].name));
         }
-        console.log(dbs);
+        //console.log(dbs);
 		for (var c in collections){
 			var collection = collections[c];
                 collection.find({
@@ -69,9 +69,9 @@ function doget(req, res){
 
                 }).toArray(function(err, doc3) {
 					for (var d in doc3){
-					//	console.log(doc3[d])
+					//	//console.log(doc3[d])
 						
-						console.log(doc3[d].trades);
+						//console.log(doc3[d].trades);
 						if (doc3[d].trades){
 						if (doc3[d].trades.bought1 == false){
 							if (doc3[d].trades.currencyPair.substr(0, doc3[d].trades.currencyPair.indexOf('_')) == "BTC" && parseFloat(doc3[d].trades.lowestAsk) > 0.00000200){
@@ -95,10 +95,10 @@ function doget(req, res){
 						count++;
 					}
 					else{
-						console.log('1');
+						//console.log('1');
 						poloniex.returnBalances(function(err, balances) {
 						if (err) {
-							console.log(err.message);
+							//console.log(err.message);
 							res.send('temporary error, retry ' + err.message);
 						} else {
 							var totals = []
@@ -125,8 +125,8 @@ function doget(req, res){
 							var tsYesterday = ts - (24 * 3600) - 1000;
 							var trades = []
 							poloniex.returnMyTradeHistory('all', (startDate.getTime() / 1000), ts, 200, function(err, data) {
-								console.log(err);
-								console.log(data);
+								//console.log(err);
+								//console.log(data);
 								var ccc = 0;
 							for (var d in data){
 							totals.push({'pair': d, 'total': 0});
@@ -149,11 +149,11 @@ function doget(req, res){
 					var minutes = Math.floor((diff2/1000)/60);
 					var hours = ((diff2/1000)/60 / 60).toFixed(8);
 					var percentHr = (percent / hours).toFixed(4);
-							console.log(balances.BTC);
+							//console.log(balances.BTC);
 							trades.sort(sortFunction3);
 							stoplimits.sort(sortFunction);
-		console.log(stoplimits);
-		console.log((totals).toString());
+		//console.log(stoplimits);
+		//console.log((totals).toString());
 		var thetotal = 0;
 		for (var t in totals){
 			thetotal+=totals[t].total;
@@ -197,7 +197,7 @@ app.get('/', function(req, res) {
 	try {
 		doget(req, res);
 	} catch (err){
-		console.log(err);
+		//console.log(err);
 		setTimeout(function(){
 		doget(req, res);
 		}, 20000);
@@ -205,7 +205,7 @@ app.get('/', function(req, res) {
 });
 
             app.listen(process.env.PORT || 8080, function() {});
-						console.log('2');
+						//console.log('2');
 poloniex.subscribe('ticker');
 //poloniex.subscribe('BTC_ETC');
  var vols = [];
@@ -222,7 +222,7 @@ poloniex.subscribe('ticker');
 			 bases.push(base);
 		 }
 	 }
-	 console.log(bases);
+	 //console.log(bases);
 	 for (var base in bases){
 		 basePairs[bases[base]] = []
 	 }
@@ -234,7 +234,7 @@ poloniex.subscribe('ticker');
 	 }
 	 var volTot = 0;
 	 var count = 0;
-	// console.logbasePairs);
+	// //console.logbasePairs);
 	for (var p in basePairs){
 		for (var a in basePairs[p]){
 			
@@ -255,9 +255,9 @@ poloniex.subscribe('ticker');
 		count++;
 		}
 	}
-	console.log(volTot);
-	console.log(count);
-	console.log('avg vol: ' + volTot / count);
+	//console.log(volTot);
+	//console.log(count);
+	//console.log('avg vol: ' + volTot / count);
 	var avg = volTot / count;
 	var winners = [];
 	for (var p in basePairs){
@@ -286,8 +286,8 @@ poloniex.subscribe('ticker');
 		}
 		
 	}
-	console.log(winners);
-	console.log(winners.length);
+	//console.log(winners);
+	//console.log(winners.length);
 	for (var p in winners){
 		var avg = ((parseFloat(winners[p]['24hrHigh']) + parseFloat(winners[p]['24hrLow'])) / 2);
 		
@@ -376,7 +376,7 @@ poloniex.subscribe('ticker');
 		
 	},
 	function(err, result) {
-		console.log(result.result);
+		//console.log(result.result);
 	});
 	}
 					}
@@ -384,14 +384,14 @@ poloniex.subscribe('ticker');
 				}
  function subs(currencyPair){
 	 setTimeout(function(){
-					//	console.log('3');
+					//	//console.log('3');
 					poloniex.subscribe(currencyPair);
 					}, Math.random() *120000);
  }
  
  function insert(wp, collection){
-	 console.log(wp);
-	 console.log('insert');
+	 //console.log(wp);
+	 //console.log('insert');
 	 collection.update({
 		'trades.currencyPair': wp.currencyPair
 	},{
@@ -400,25 +400,25 @@ poloniex.subscribe('ticker');
 	},
 	function(err, result) {
 
-		if (err) console.log(err);
+		if (err) //console.log(err);
 		if (result.result.nModified == 0) {
 			
 			collection.insertOne({
 				'trades': wp
 			}, function(err, res) {
-				if (err) console.log(err);
+				if (err) //console.log(err);
 				
 			if (wp.currencyPair == "BTC_BCH"){
-				console.log(wp);
+				//console.log(wp);
 			}
-			  console.log(res.result);
+			  //console.log(res.result);
 			}); 
 		} else {
 			if (wp.currencyPair == "BTC_BCH"){
-				console.log(wp);
+				//console.log(wp);
 			}
-			console.log(wp);
-		console.log(result.result);
+			//console.log(wp);
+		//console.log(result.result);
 		}
 	});
  }
@@ -445,23 +445,23 @@ poloniex.subscribe('ticker');
 	},
 	function(err, result) {
 
-		if (err) console.log(err);
+		if (err) //console.log(err);
 		if (result.result.nModified == 0) {
 			/*
 			collection.insertOne({
 				'trades.lowestAsk': ask
 			}, function(err, res) {
-				if (err) console.log(err);
+				if (err) //console.log(err);
 				
 			if (currencyPair == "BTC_BCH"){
-				console.log(ask);
+				//console.log(ask);
 			}
-			  console.log(res.result);
+			  //console.log(res.result);
 			}); */
 		} else {
-				console.log(ask);
-			console.log(ask);
-		console.log(result.result);
+				//console.log(ask);
+			//console.log(ask);
+		//console.log(result.result);
 		}
 	});
 						}
@@ -477,7 +477,7 @@ var dbs = []
 var collections = []
 setTimeout(function(){
 MongoClient.connect(process.env.mongodb || mongodb, function(err, db) {
-	console.log(err);
+	//console.log(err);
     var dbo = db.db('polomonster138-test123')
 	var count = 0;
     dbo.listCollections().toArray(function(err, collInfos) {
@@ -488,8 +488,8 @@ MongoClient.connect(process.env.mongodb || mongodb, function(err, db) {
             dbs.push(collInfos[col].name);
             collections.push(dbo.collection(collInfos[col].name));
         }
-        console.log(dbs);
-						console.log('settimeout');
+        //console.log(dbs);
+						//console.log('settimeout');
                 setInterval(function() {
                     doCollections(collections);
                 }, 7500);
@@ -499,33 +499,33 @@ MongoClient.connect(process.env.mongodb || mongodb, function(err, db) {
  function dobuy(d3d, cc, amount){
 	 if (d3d.trades.bought1 == false){
 	 poloniex.buy(d3d.trades.currencyPair, parseFloat(d3d.trades.buy1).toFixed(8), amount.toFixed(8), 0, 0, 0 , function (err, data2){
-		 console.log(err)
-		console.log(data2);
+		 //console.log(err)
+		//console.log(data2);
 		poloniex.sell(d3d.trades.currencyPair, parseFloat(d3d.trades.sell1).toFixed(8), (amount * .998).toFixed(8), 0, 0, 0 , function (err, data3){
-		console.log(data3);
-		console.log(err);
+		//console.log(data3);
+		//console.log(err);
 
 	});
  });
 	 } else {
-		 console.log('bought1 true, why buy?');
+		 //console.log('bought1 true, why buy?');
 	 }
  }
 
  function dobuy2(d3d, cc, amount){
 	 if (d3d.trades.bought2 == false){
 	 poloniex.buy(d3d.trades.currencyPair, parseFloat(d3d.trades.buy2).toFixed(8), amount.toFixed(8), 0, 0, 0 , function (err, data2){
-		console.log(data2);
-		console.log(err);
+		//console.log(data2);
+		//console.log(err);
 		poloniex.sell(d3d.trades.currencyPair, parseFloat(d3d.trades.sell2).toFixed(8), (amount * .998).toFixed(8), 0, 0, 0 , function (err, data3){
-			console.log(data3);
-			console.log(err);
+			//console.log(data3);
+			//console.log(err);
 			
 
 	});
 	});
 	 } else {
-		 console.log('bought2 true, why buy?');
+		 //console.log('bought2 true, why buy?');
 	 }
  }
  var godobuy = true;
@@ -540,14 +540,14 @@ function cancel(d3d, cc, balance){
 			},
 			function(err, result) {
 
-				if (err) console.log(err);
-				console.log(result.result);
+				if (err) //console.log(err);
+				//console.log(result.result);
 				if (result.result.nModified == 0) {
 
 					cc.insertOne({
 						'trades': d3d
 					}, function(err, res) {
-						if (err) console.log(err);
+						if (err) //console.log(err);
 					  callback(res.result);
 					});
 				} else {
@@ -568,14 +568,14 @@ function cancel(d3d, cc, balance){
 			},
 			function(err, result) {
 
-				if (err) console.log(err);
-				console.log(result.result);
+				if (err) //console.log(err);
+				//console.log(result.result);
 				if (result.result.nModified == 0) {
 
 					cc.insertOne({
 						'trades': d3d
 					}, function(err, res) {
-						if (err) console.log(err);
+						if (err) //console.log(err);
 					  callback(res.result);
 					});
 				} else {
@@ -596,8 +596,8 @@ function cancel(d3d, cc, balance){
                         }, {multi: true},
 	function(err, result) {
 
-		if (err) console.log(err);
-		console.log(result.result);
+		if (err) //console.log(err);
+		//console.log(result.result);
 		if (result.result.nModified == 0) {
 
 		} else {
@@ -608,29 +608,29 @@ function cancel(d3d, cc, balance){
 function doCollections(collections, balances){
 							
 							
-						console.log('8'); 
+						//console.log('8'); 
     poloniex.returnBalances(function(err, balances) {
 				poloniex.returnOpenOrders('all', function(err, data) {
 					var ts = Math.round(new Date().getTime() / 1000) - 1000;
 					var tsHour = ts - (30 * 60) - 1000;
-					console.log(tsHour);
+					//console.log(tsHour);
 						for (var d in data){
 								if (data[d].length > 0){
 									for (var a in data[d]){
 										data[d][a].pair = d;
-										console.log(data[d][a].type);
+										//console.log(data[d][a].type);
 										if (data[d][a].type == "buy"){
 										data[d][a].currentBid = bestBid[data[d][a].pair];
 										var date = new Date(data[d][a].date).getTime() / 1000;
-											console.log(date); 
+											//console.log(date); 
 										var date2 = startDate.getTime() / 1000;
 										if (date <= tsHour && date >= date2){
-											console.log(parseFloat(data[d][a].orderNumber));
-											console.log('cancel cancel!');
+											//console.log(parseFloat(data[d][a].orderNumber));
+											//console.log('cancel cancel!');
 											
 											
 											poloniex.cancelOrder(parseFloat(data[d][a].orderNumber), function(data){
-												console.log('cancelled');
+												//console.log('cancelled');
 											});
 											
 											
@@ -642,14 +642,14 @@ function doCollections(collections, balances){
 							}
 							
         if (err) {
-            console.log(err.message);
+            //console.log(err.message);
 			
 
                 setTimeout(function() {
                     doCollections(collections);
                 }, 7500);
         } else {
-            console.log(balances.BTC);
+            //console.log(balances.BTC);
 			
 			var btc = parseFloat(balances.BTC) / 32;
 			if (btc < 0.0001){
@@ -687,17 +687,17 @@ function collectionDo(collection, data, balances, btc){
 									
 								}
 							}
-							console.log('ds: ');
-							console.log(ds);
+							//console.log('ds: ');
+							//console.log(ds);
 							if (doc3[d].trades.currencyPair){
 								if (doc3[d].trades.buy2){
 								if (doc3[d].trades.bought1 == true && doc3[d].trades.bought2 == true && !ds.includes(doc3[d].trades.currencyPair)){
 									if (doc3[d].trades.bought1 == true){
-									console.log('bought1 and bought2 true');
+									//console.log('bought1 and bought2 true');
 								}
 								if (!ds.includes(doc3[d].trades.currencyPair)){
-									console.log('ds no include ' + doc3[d].trades.currencyPair);
-									console.log(ds);
+									//console.log('ds no include ' + doc3[d].trades.currencyPair);
+									//console.log(ds);
 								}
 									doc3[d].trades.bought1 = false;
 									doc3[d].trades.bought2 = false;
@@ -708,8 +708,8 @@ function collectionDo(collection, data, balances, btc){
 										}
 									}, { multi: true },
 									function(err, result) {
-									   console.log(err);
-										console.log(result.result);
+									   //console.log(err);
+										//console.log(result.result);
 									godobuy = true;
 															
 
@@ -717,11 +717,11 @@ function collectionDo(collection, data, balances, btc){
 								}
 								} else if (doc3[d].trades.bought1 == true && !ds.includes(doc3[d].trades.currencyPair)){
 									if (doc3[d].trades.bought1 == true){
-									console.log('bought1 true');
+									//console.log('bought1 true');
 								}
 								if (!ds.includes(doc3[d].trades.currencyPair)){
-									console.log('ds no include ' + doc3[d].trades.currencyPair);
-									console.log(ds);
+									//console.log('ds no include ' + doc3[d].trades.currencyPair);
+									//console.log(ds);
 								}
 									doc3[d].trades.bought1 = false;
 									doc3[d].trades.bought2 = false;
@@ -732,8 +732,8 @@ function collectionDo(collection, data, balances, btc){
 										}
 									}, { multi: true },
 									function(err, result) {
-									   console.log(err);
-										console.log(result.result);
+									   //console.log(err);
+										//console.log(result.result);
 									godobuy = true;
 															
 
@@ -742,7 +742,7 @@ function collectionDo(collection, data, balances, btc){
 							
 						if (doc3[d].trades.currencyPair.substr(0, doc3[d].trades.currencyPair.indexOf('_')) == "BTC"){
 						var amount = btc / parseFloat(doc3[d].trades.lowestAsk);
-                         console.log(amount);
+                         //console.log(amount);
 						if (parseFloat(doc3[d].trades.lowestAsk) <= doc3[d].trades.sl && doc3[d].trades.bought1 == true && doc3[d].trades.cancelled == false){
 							//cancel(doc3[d], collections[c], balances[doc3[d].trades.currencyPair.substr(doc3[d].trades.currencyPair.indexOf('_'), doc3[d].trades.currencyPair.length)]);
 						}
@@ -750,19 +750,19 @@ function collectionDo(collection, data, balances, btc){
 							//cancel2(doc3[d], collections[c],  balances[doc3[d].trades.currencyPair.substr(doc3[d].trades.currencyPair.indexOf('_'), doc3[d].trades.currencyPair.length)]);
 						}
 						
-						console.log(doc3[d].trades.currencyPair);
-						console.log(doc3[d].trades);
+						//console.log(doc3[d].trades.currencyPair);
+						//console.log(doc3[d].trades);
 						if (doc3[d].trades.bought1 == false){
                         if (parseFloat(doc3[d].trades.lowestAsk) <= doc3[d].trades.buy1 && parseFloat(doc3[d].trades.lowestAsk) > 0.00000200) {
                         var amount = btc / parseFloat(doc3[d].trades.lowestAsk);
-                            console.log(doc3[d].trades.last);
-							console.log(doc3[d].trades);
+                            //console.log(doc3[d].trades.last);
+							//console.log(doc3[d].trades);
 							doc3[d].trades.bought1 = true;
 							if (godobuy == true){
 								godobuy = false;
 
-							console.log('dobuy: ' +  amount);
-							console.log(doc3[d]);
+							//console.log('dobuy: ' +  amount);
+							//console.log(doc3[d]);
 							collection.update({
 								}, {
 									$set: {
@@ -770,8 +770,8 @@ function collectionDo(collection, data, balances, btc){
 									}
 								}, { multi: true },
 								function(err, result) {
-								   console.log(err);
-									console.log(result.result);
+								   //console.log(err);
+									//console.log(result.result);
 								godobuy = true;
 														
 
@@ -783,8 +783,8 @@ function collectionDo(collection, data, balances, btc){
                         if (doc3[d].trades.buy2) {
                             if (parseFloat(doc3[d].trades.lowestAsk) <= doc3[d].trades.buy2 && doc3[d].trades.bought2 == false && parseFloat(doc3[d].trades.lowestAsk) > 0.00000200) {
                         var amount = btc / parseFloat(doc3[d].trades.lowestAsk);
-							console.log(doc3[d].trades.last);
-							console.log(doc3[d].trades);
+							//console.log(doc3[d].trades.last);
+							//console.log(doc3[d].trades);
 							doc3[d].trades.bought2 = true;
 														if (godobuy == true){
 godobuy = false;
@@ -795,13 +795,13 @@ godobuy = false;
 									}
 								}, { multi: true },
 								function(err, result) {
-								   console.log(err);
-									console.log(result.result);
+								   //console.log(err);
+									//console.log(result.result);
 								godobuy = true;
 														
 
 								});
-							console.log('dobuy2: ' +  amount);
+							//console.log('dobuy2: ' +  amount);
 							dobuy2(doc3[d], collection, amount);
                             }
 							}
@@ -812,9 +812,9 @@ godobuy = false;
 					
 					if (count + 1 <= collections.length - 1){
 						count++;
-						console.log(count);
+						//console.log(count);
 					}else {
-						console.log('settimeout');
+						//console.log('settimeout');
                
 					
 					}}
@@ -822,9 +822,9 @@ godobuy = false;
 }
 var dbo;
 				MongoClient.connect(process.env.mongodb || mongodb, function(err, db) {
-					console.log(err);
+					//console.log(err);
 				dbo = db.db('polomonster138-test123')
-				console.log('dbo');
+				//console.log('dbo');
 				
 				});
 poloniex.on('message', (channelName, data, seq) => {
@@ -833,18 +833,18 @@ poloniex.on('message', (channelName, data, seq) => {
 	  
 	  
 	var obj = JSON.parse(JSON.stringify(data));
-	console.log(obj);
+	//console.log(obj);
 	if (obj.currencyPair == "BTC_ETH"){
 		btceth = obj.last;
-		console.log('eth: ' + btceth);
+		//console.log('eth: ' + btceth);
 	}
 	else if (obj.currencyPair == "BTC_XMR"){
 		btcxmr = obj.last;
-		console.log('xmr: ' + btcxmr);
+		//console.log('xmr: ' + btcxmr);
 	}
 	else if (obj.currencyPair == "USDT_BTC"){
 		btcusdt = obj.last;
-		console.log('usdt: ' + btcusdt);
+		//console.log('usdt: ' + btcusdt);
 	}
 	if (!pairs.includes(obj.currencyPair)){
 	vols.push(obj); 
@@ -852,7 +852,7 @@ poloniex.on('message', (channelName, data, seq) => {
 	}/*
 	
 		*/
-		console.log(vols.length);
+		//console.log(vols.length);
 		if (vols.length > 20 && msgcount > 30){ // prod 50
 		msgcount = 0;
 		doVols = true;
@@ -865,8 +865,8 @@ poloniex.on('message', (channelName, data, seq) => {
 		 
 			 var collection = dbo.collection(channelName);
 		 if (data[0].type =='orderBook'){
-			 console.log(Object.keys(data[0].data.asks)[0]);
-			 console.log(Object.keys(data[0].data.bids)[0]);
+			 //console.log(Object.keys(data[0].data.asks)[0]);
+			 //console.log(Object.keys(data[0].data.bids)[0]);
 			 bestAsk[channelName] = Object.keys(data[0].data.asks)[0];
 			 bestBid[channelName] = Object.keys(data[0].data.bids)[0];
 		
@@ -899,22 +899,22 @@ poloniex.on('message', (channelName, data, seq) => {
 	}
  
   if (channelName === 'BTC_ETC') {
-    console.log(`order book and trade updates received for currency pair ${channelName}`);
-    console.log(`data sequence number is ${seq}`);
+    //console.log(`order book and trade updates received for currency pair ${channelName}`);
+    //console.log(`data sequence number is ${seq}`);
   }
 });
  
 poloniex.on('open', () => {
-  console.log(`Poloniex WebSocket connection open`);
+  //console.log(`Poloniex WebSocket connection open`);
 });
  
 poloniex.on('close', (reason, details) => {
- console.log(`Poloniex WebSocket connection disconnected`);
+ //console.log(`Poloniex WebSocket connection disconnected`);
 });
  
 poloniex.on('error', (error) => {
-console.log(`An error has occured`);
- console.log(error);
+//console.log(`An error has occured`);
+ //console.log(error);
 });
 
 setTimeout(function(){
