@@ -146,8 +146,8 @@ collection.find({
 											}
 											else {
 										thetotal += (parseFloat(data[d][a].total))
-										ttotal += (parseFloat(data[d][a].total))
-											}
+											}										ttotal += (parseFloat(data[d][a].total))
+
 										} else{
 																						if ((parseFloat(data[d][a].amount) * parseFloat(bestAsk[data[d][a].pair]))){
 
@@ -155,8 +155,8 @@ collection.find({
 																						}
 																						else {
 									     thetotal = thetotal - (parseFloat(data[d][a].total))
-										 ttotal = ttotal - (parseFloat(data[d][a].total))
-																						}
+																						}										 ttotal = ttotal - (parseFloat(data[d][a].total))
+
 										}
 									}
 									}
