@@ -156,11 +156,11 @@ collection.find({
 										} else{
 																						if ((parseFloat(data[d][a].amount) * parseFloat(bestAsk[data[d][a].pair]))){
 
-									     thetotal = thetotal - (parseFloat(data[d][a].amount) * parseFloat(bestAsk[data[d][a].pair])) * 0.999
+									     thetotal = thetotal - (parseFloat(data[d][a].amount) * parseFloat(bestAsk[data[d][a].pair])) * 1.001
 																						}
 																						else {
-									     thetotal = thetotal - (parseFloat(data[d][a].total)) * 0.999
-																						}										 ttotal = ttotal - (parseFloat(data[d][a].total)) * 0.999
+									     thetotal = thetotal - (parseFloat(data[d][a].total)) * 1.001
+																						}										 ttotal = ttotal - (parseFloat(data[d][a].total)) * 1.001
 
 										}
 									}
@@ -183,9 +183,11 @@ collection.find({
 									for (var a in data[d]){
 										data[d][a].pair = d;
 										if (data[d][a].type == 'sell'){
-											totals[ccc].total += parseFloat(data[d][a].total) * (1 - data[d][a].fee);
+											totals[ccc].total += (parseFloat(data[d][a].total) * (1 - parseFloat(data[d][a].fee)));
+											console.log((1 - parseFloat(data[d][a].fee)));
 										}else {
-											totals[ccc].total = totals[ccc].total - (parseFloat(data[d][a].total)  * (1 - data[d][a].fee));
+											console.log( (1 - parseFloat(data[d][a].fee)));
+											totals[ccc].total = totals[ccc].total - (parseFloat(data[d][a].total)  * (1 + parseFloat(data[d][a].fee)));
 										}
 										trades.push(data[d][a]);
 													 console.log(data[d][a]);
