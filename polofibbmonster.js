@@ -341,7 +341,7 @@ poloniex.subscribe('ticker');
 						winnas.push(winners[p].currencyPair);
 											
 					
-					insert(winners[p], collection);
+				//	insert(winners[p], collection);
 					}
 					updateStoplimits(winners[p], collection);
 							}
@@ -499,11 +499,11 @@ MongoClient.connect(process.env.mongodb || mongodb, function(err, db) {
  function dobuy(d3d, cc, amount){
 	 if (d3d.trades.bought1 == false){
 	 poloniex.buy(d3d.trades.currencyPair, parseFloat(d3d.trades.buy1).toFixed(8), amount.toFixed(8), 0, 0, 0 , function (err, data2){
-		 //console.log(err)
-		//console.log(data2);
+		 console.log(err)
+		console.log(data2);
 		poloniex.sell(d3d.trades.currencyPair, parseFloat(d3d.trades.sell1).toFixed(8), (amount * .998).toFixed(8), 0, 0, 0 , function (err, data3){
-		//console.log(data3);
-		//console.log(err);
+		console.log(data3);
+		console.log(err);
 
 	});
  });
@@ -515,11 +515,11 @@ MongoClient.connect(process.env.mongodb || mongodb, function(err, db) {
  function dobuy2(d3d, cc, amount){
 	 if (d3d.trades.bought2 == false){
 	 poloniex.buy(d3d.trades.currencyPair, parseFloat(d3d.trades.buy2).toFixed(8), amount.toFixed(8), 0, 0, 0 , function (err, data2){
-		//console.log(data2);
-		//console.log(err);
+		console.log(data2);
+		console.log(err);
 		poloniex.sell(d3d.trades.currencyPair, parseFloat(d3d.trades.sell2).toFixed(8), (amount * .998).toFixed(8), 0, 0, 0 , function (err, data3){
-			//console.log(data3);
-			//console.log(err);
+			console.log(data3);
+			console.log(err);
 			
 
 	});
@@ -761,7 +761,7 @@ function collectionDo(collection, data, balances, btc){
 							if (godobuy == true){
 								godobuy = false;
 
-							//console.log('dobuy: ' +  amount);
+							console.log('dobuy: ' +  amount);
 							//console.log(doc3[d]);
 							collection.update({
 								}, {
@@ -801,7 +801,7 @@ godobuy = false;
 														
 
 								});
-							//console.log('dobuy2: ' +  amount);
+							console.log('dobuy2: ' +  amount);
 							dobuy2(doc3[d], collection, amount);
                             }
 							}
