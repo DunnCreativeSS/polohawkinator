@@ -125,7 +125,7 @@ function doget(req, res){
 							var tsYesterday = ts - (24 * 3600) - 1000;
 							var trades = []
 							poloniex.returnMyTradeHistory('all', (startDate.getTime() / 1000), ts, 200, function(err, data) {
-								//console.log(err);
+								console.log(err);
 								//console.log(data);
 								var ccc = 0;
 							for (var d in data){
@@ -197,7 +197,7 @@ app.get('/', function(req, res) {
 	try {
 		doget(req, res);
 	} catch (err){
-		//console.log(err);
+		console.log(err);
 		setTimeout(function(){
 		doget(req, res);
 		}, 20000);
@@ -406,7 +406,7 @@ poloniex.subscribe('ticker');
 			collection.insertOne({
 				'trades': wp
 			}, function(err, res) {
-				if (err) //console.log(err);
+				if (err) console.log(err);
 				
 			if (wp.currencyPair == "BTC_BCH"){
 				//console.log(wp);
@@ -451,7 +451,7 @@ poloniex.subscribe('ticker');
 			collection.insertOne({
 				'trades.lowestAsk': ask
 			}, function(err, res) {
-				if (err) //console.log(err);
+				if (err) console.log(err);
 				
 			if (currencyPair == "BTC_BCH"){
 				//console.log(ask);
@@ -477,9 +477,11 @@ var dbs = []
 var collections = []
 setTimeout(function(){
 MongoClient.connect(process.env.mongodb || mongodb, function(err, db) {
-	//console.log(err);
+	console.log(err);
     var dbo = db.db('polomonster138-test1112322')
 	var count = 0;
+					poloniex.returnOpenOrders('all', function(err, data) {
+
     dbo.listCollections().toArray(function(err, collInfos) {
         // collInfos is an array of collection info objects that look like:
         // { name: 'test', options: {} }
@@ -488,12 +490,79 @@ MongoClient.connect(process.env.mongodb || mongodb, function(err, db) {
             dbs.push(collInfos[col].name);
             collections.push(dbo.collection(collInfos[col].name));
         }
+		var ds = []
+		for (var c in collections){
+			var collection = collections[c];
+		collection.find({
+
+                }, {
+                    $exists: true
+                }).sort({
+                    _id: -1
+
+                }).toArray(function(err, doc3) {
+                    for (var d in doc3) {
+						if (doc3[d].trades){
+							for (var da in data){
+								if (data[da].length > 0){
+									
+									if (!ds.includes(da)){
+										ds.push(da);
+									}
+										//trades.push(data[d][a]);
+									
+								}
+							}
+							console.log('ds: ');
+							console.log(ds);
+							var dsinc = 0
+							if (doc3[d].trades.currencyPair){
+								if (ds.includes(doc3[d].trades.currencyPair)){
+									doc3[d].trades.bought1 = true;
+									doc3[d].trades.sold1 = true;
+									dsinc++;
+					if (dsinc >= 2){
+						doc3[d].trades.bought2 = true;
+									doc3[d].trades.sold2 = true;
+					}
+			var collection2 =dbo.collection( doc3[d].trades.currencyPair );
+					collection2.update({
+							'trades.currencyPair': doc3[d].trades.currencyPair
+						},{
+												$set: {
+													'trades.bought1': doc3[d].trades.bought1,
+													'trades.bought2': doc3[d].trades.bought2,
+													
+													'trades.sold1': doc3[d].trades.sold1,
+													'trades.sold2': doc3[d].trades.sold2
+													
+												}
+											}, {multi: true},
+						function(err, result) {
+
+							if (err) console.log(err);
+							console.log(result.result);
+							if (result.result.nModified == 0) {
+
+							} else {
+								console.log(result.result);
+							}
+						});
+								}
+							}
+							
+						}
+					}
+				});
+		}
+		
         //console.log(dbs);
 						//console.log('settimeout');
                 setInterval(function() {
                     doCollections(collections);
                 }, 7500);
     });
+});
 });
 }, 10000);
  function dobuy(d3d, cc, amount){
@@ -532,14 +601,14 @@ function cancel(d3d, cc, balance){
 			},
 			function(err, result) {
 
-				if (err) //console.log(err);
+				if (err) console.log(err);
 				//console.log(result.result);
 				if (result.result.nModified == 0) {
 
 					cc.insertOne({
 						'trades': d3d
 					}, function(err, res) {
-						if (err) //console.log(err);
+						if (err) console.log(err);
 					  callback(res.result);
 					});
 				} else {
@@ -560,14 +629,14 @@ function cancel(d3d, cc, balance){
 			},
 			function(err, result) {
 
-				if (err) //console.log(err);
+				if (err) console.log(err);
 				//console.log(result.result);
 				if (result.result.nModified == 0) {
 
 					cc.insertOne({
 						'trades': d3d
 					}, function(err, res) {
-						if (err) //console.log(err);
+						if (err) console.log(err);
 					  callback(res.result);
 					});
 				} else {
@@ -588,7 +657,7 @@ function cancel(d3d, cc, balance){
                         }, {multi: true},
 	function(err, result) {
 
-		if (err) //console.log(err);
+		if (err) console.log(err);
 		//console.log(result.result);
 		if (result.result.nModified == 0) {
 
@@ -679,8 +748,6 @@ function collectionDo(collection, data, balances, btc){
 									
 								}
 							}
-							//console.log('ds: ');
-							//console.log(ds);
 							if (doc3[d].trades.currencyPair){
 								if (doc3[d].trades.buy2){
 								if (doc3[d].trades.bought1 == true && doc3[d].trades.bought2 == true && !ds.includes(doc3[d].trades.currencyPair)){
@@ -700,37 +767,14 @@ function collectionDo(collection, data, balances, btc){
 										}
 									}, { multi: true },
 									function(err, result) {
-									   //console.log(err);
+									   console.log(err);
 										//console.log(result.result);
 									godobuy = true;
 															
 
 									});
 								}
-								} else if (doc3[d].trades.bought1 == true && !ds.includes(doc3[d].trades.currencyPair)){
-									if (doc3[d].trades.bought1 == true){
-									//console.log('bought1 true');
-								}
-								if (!ds.includes(doc3[d].trades.currencyPair)){
-									//console.log('ds no include ' + doc3[d].trades.currencyPair);
-									//console.log(ds);
-								}
-									doc3[d].trades.bought1 = false;
-									doc3[d].trades.bought2 = false;
-									collection.update({
-									}, {
-										$set: {
-											"trades": doc3[d].trades
-										}
-									}, { multi: true },
-									function(err, result) {
-									   //console.log(err);
-										//console.log(result.result);
-									godobuy = true;
-															
-
-									});
-								}
+								} 
 							
 						if (doc3[d].trades.currencyPair.substr(0, doc3[d].trades.currencyPair.indexOf('_')) == "BTC"){
 						var amount = btc / parseFloat(doc3[d].trades.lowestAsk);
@@ -762,7 +806,7 @@ function collectionDo(collection, data, balances, btc){
 									}
 								}, { multi: true },
 								function(err, result) {
-								   //console.log(err);
+								   console.log(err);
 									//console.log(result.result);
 								godobuy = true;
 														
@@ -787,7 +831,7 @@ godobuy = false;
 									}
 								}, { multi: true },
 								function(err, result) {
-								   //console.log(err);
+								   console.log(err);
 									//console.log(result.result);
 								godobuy = true;
 														
@@ -814,7 +858,7 @@ godobuy = false;
 }
 var dbo;
 				MongoClient.connect(process.env.mongodb || mongodb, function(err, db) {
-					//console.log(err);
+					console.log(err);
 				dbo = db.db('polomonster138-test1112322')
 				//console.log('dbo');
 				
