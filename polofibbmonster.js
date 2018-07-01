@@ -138,6 +138,7 @@ collection.find({
 										
 										if (ons.includes(parseFloat(data[d][a].orderNumber))){
 										data[d][a].pair = d;
+										data[d][a].fee = 0.00100000;
 										data[d][a].currentBid = bestBid[data[d][a].pair];
 										data[d][a].percent = (parseFloat(data[d][a].currentBid) / parseFloat(data[d][a].rate));
 										data[d][a].sats = Math.floor((data[d][a].rate - data[d][a].currentBid) * Math.pow(10, 8));
@@ -146,20 +147,20 @@ collection.find({
 										//console.log(data[d][a].type );
 										if (data[d][a].type == 'sell'){
 											if ((parseFloat(data[d][a].amount) * parseFloat(bestBid[data[d][a].pair]))){
-										thetotal += (parseFloat(data[d][a].amount) * parseFloat(bestBid[data[d][a].pair]))
+										thetotal += (parseFloat(data[d][a].amount) * parseFloat(bestBid[data[d][a].pair])) * 0.999
 											}
 											else {
-										thetotal += (parseFloat(data[d][a].total))
-											}										ttotal += (parseFloat(data[d][a].total))
+										thetotal += (parseFloat(data[d][a].total)) * 0.999
+											}										ttotal += (parseFloat(data[d][a].total)) * 0.999
 
 										} else{
 																						if ((parseFloat(data[d][a].amount) * parseFloat(bestAsk[data[d][a].pair]))){
 
-									     thetotal = thetotal - (parseFloat(data[d][a].amount) * parseFloat(bestAsk[data[d][a].pair]))
+									     thetotal = thetotal - (parseFloat(data[d][a].amount) * parseFloat(bestAsk[data[d][a].pair])) * 0.999
 																						}
 																						else {
-									     thetotal = thetotal - (parseFloat(data[d][a].total))
-																						}										 ttotal = ttotal - (parseFloat(data[d][a].total))
+									     thetotal = thetotal - (parseFloat(data[d][a].total)) * 0.999
+																						}										 ttotal = ttotal - (parseFloat(data[d][a].total)) * 0.999
 
 										}
 									}
@@ -182,9 +183,9 @@ collection.find({
 									for (var a in data[d]){
 										data[d][a].pair = d;
 										if (data[d][a].type == 'sell'){
-											totals[ccc].total += parseFloat(data[d][a].total);
+											totals[ccc].total += parseFloat(data[d][a].total) * (1 - data[d][a].fee);
 										}else {
-											totals[ccc].total = totals[ccc].total - parseFloat(data[d][a].total);
+											totals[ccc].total = totals[ccc].total - (parseFloat(data[d][a].total)  * (1 - data[d][a].fee));
 										}
 										trades.push(data[d][a]);
 													 console.log(data[d][a]);
