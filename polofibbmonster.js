@@ -42,6 +42,8 @@ function sortFunction(a,b){
 	return dateA > dateB ? 1 : -1;  
 }; 
 							var tradesd = []
+							var ttotal = 0;
+							var tradetotal = 0;
 function doget(req, res){
 	try{
 		tradesd = []
@@ -123,7 +125,7 @@ collection.find({
 					for (var d in doc3){
 						ons.push(doc3[d].on);
 					}
-							var ttotal = 0;
+							ttotal = 0;
 							poloniex.returnOpenOrders('all', function(err, data) {
 								
 							for (var d in data){
@@ -213,7 +215,7 @@ collection.find({
 							stoplimits.sort(sortFunction);
 		//console.log(stoplimits);
 		//console.log((totals).toString());
-		var tradetotal = 0;
+		tradetotal = 0;
 		for (var t in totals){
 			thetotal+=totals[t].total;
 			ttotal += totals[t].total;
