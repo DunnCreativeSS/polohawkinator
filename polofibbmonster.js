@@ -245,7 +245,7 @@ ttotal = ttotal + 0.00494003
 		var hours = ((diff2/1000)/60 / 60).toFixed(8);
 		var percentHr = (percent / hours).toFixed(4);
 		var percent2 =  (100 * (-1 * (1 - (( thetotal + tradetotal) / startBtcliq)))).toFixed(4);
-		var percentHr2 = (percent / hours).toFixed(4);
+		var percentHr2 = (percent2 / hours).toFixed(4);
 		res.send('<head><link rel="icon" href="https://polofibbmonster.herokuapp.com/favicon.ico?v=2" /><meta http-equiv="refresh" content="36"><script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script></head><h1>Don\'t Panic! If the data seems off, wait a minute or so.</h1>'
 		+ 'current time: ' + new Date()
 		+ '<br>BTC Balance: ' + btcbal + '<br>'
