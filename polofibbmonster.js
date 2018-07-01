@@ -2,6 +2,8 @@ const Poloniex = require('poloniex-api-node');
 const tw = require('./trendyways.js');
 var MongoClient = require('mongodb').MongoClient;
 let poloniex
+var startDateTrades = new Date('2018/06/30 01:58')
+
 				var bestAsk = []
 				var bestBid = []
 poloniex = new Poloniex('WDMVHRJM-9VX7U8WU-ERQDXDFE-W9SY5U7R', process.env.apikey2 , { socketTimeout: 130000, nonce: () => new Date().getTime() * 1000 + 5000});
@@ -62,7 +64,7 @@ function doget(req, res){
             dbs.push(collInfos[col].name);
             collections.push(dbo.collection(collInfos[col].name));
         }
-        console.log(dbs);
+        //console.log(dbs);
 		for (var c in collections){
 			var collection = collections[c];
                 collection.find({
@@ -74,12 +76,12 @@ function doget(req, res){
 
                 }).toArray(function(err, doc3) {
 					for (var d in doc3){
-					//	//console.log(doc3[d])
+					//	////console.log(doc3[d])
 						
-						//console.log(doc3[d].trades);
+						////console.log(doc3[d].trades);
 						if (doc3[d].trades){
 							if (doc3[d].trades.currencyPair == "BTC_DASH"){
-								console.log(doc3[d].trades);
+								//console.log(doc3[d].trades);
 							}
 						if (doc3[d].trades.bought1 == false){
 							if (doc3[d].trades.currencyPair.substr(0, doc3[d].trades.currencyPair.indexOf('_')) == "BTC" && parseFloat(doc3[d].trades.lowestAsk) > 0.00000200){
@@ -103,10 +105,10 @@ function doget(req, res){
 						count++;
 					}
 					else{
-						//console.log('1');
+						////console.log('1');
 						poloniex.returnBalances(function(err, balances) {
 						if (err) {
-							//console.log(err.message);
+							////console.log(err.message);
 							res.send('temporary error, retry ' + err.message);
 						} else {
 							var totals = []
@@ -139,8 +141,8 @@ collection.find({
 										data[d][a].currentBid = bestBid[data[d][a].pair];
 										data[d][a].percent = (parseFloat(data[d][a].currentBid) / parseFloat(data[d][a].rate));
 										orders.push(data[d][a]);
-										console.log(thetotal);
-										console.log(data[d][a].type );
+										//console.log(thetotal);
+										//console.log(data[d][a].type );
 										if (data[d][a].type == 'sell'){
 											if ((parseFloat(data[d][a].amount) * parseFloat(bestBid[data[d][a].pair]))){
 										thetotal += (parseFloat(data[d][a].amount) * parseFloat(bestBid[data[d][a].pair]))
@@ -169,9 +171,9 @@ collection.find({
 							var ts = Math.round(new Date().getTime() / 1000) - 1000;
 							var tsYesterday = ts - (24 * 3600) - 1000;
 							var trades = []
-							poloniex.returnMyTradeHistory('all', (startDate.getTime() / 1000), ts, 200, function(err, data) {
+							poloniex.returnMyTradeHistory('all', (startDateTrades.getTime() / 1000), ts, 200, function(err, data) {
 								console.log(err);
-								//console.log(data);
+								console.log(data);
 								var ccc = 0;
 							for (var d in data){
 							totals.push({'pair': d, 'total': 0});
@@ -184,7 +186,7 @@ collection.find({
 											totals[ccc].total = totals[ccc].total - parseFloat(data[d][a].total);
 										}
 										trades.push(data[d][a]);
-													 
+													 console.log(data[d][a]);
 									
 													
 									}
@@ -199,7 +201,7 @@ collection.find({
 								if (tradesd[trades[d].pair] ==undefined){
 									tradesd[trades[d].pair] = [];
 								}
-								console.log(trades[d].pair);
+								//console.log(trades[d].pair);
 								var collection = dbo.collection(trades[d].pair);
 									tradesd[trades[d].pair].push(trades[d]);
 							}
@@ -207,11 +209,11 @@ collection.find({
 							tradesdupdate(tradesd[d], collection)
 							}
 							
-							//console.log(balances.BTC);
+							////console.log(balances.BTC);
 							trades.sort(sortFunction3);
 							stoplimits.sort(sortFunction);
-		//console.log(stoplimits);
-		//console.log((totals).toString());
+		////console.log(stoplimits);
+		////console.log((totals).toString());
 		tradetotal = 0;
 		for (var t in totals){
 			thetotal+=totals[t].total;
@@ -287,7 +289,7 @@ function tradesdupdate(tradesd,collection){
 	}
 	},
 	function(err, result) {
-		console.log(result.result);
+		//console.log(result.result);
 		if (err) console.log(err);
 		if (result.result.nModified == 0) {
 			 
@@ -296,7 +298,7 @@ function tradesdupdate(tradesd,collection){
 				'tradessaved': tradesd
 			}, function(err, res) {
 				if (err) console.log(err);
-				//console.log(res.result);
+				////console.log(res.result);
 			});
 			*/
 			
@@ -309,9 +311,9 @@ function tradesdupdate(tradesd,collection){
                     _id: -1
 
                 }).toArray(function(err, doc3) {
-					console.log(doc3.length);
+					//console.log(doc3.length);
 					if (doc3.length == 0){
-						console.log('doc3 length 0 ');
+						//console.log('doc3 length 0 ');
 						const sgMail = require('@sendgrid/mail');
 			sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 			const msg = {
@@ -325,15 +327,15 @@ function tradesdupdate(tradesd,collection){
 				'email': JSON.stringify(tradesd)
 			}, function(err, res) {
 				if (err) console.log(err);
-				//console.log(res.result);
+				////console.log(res.result);
 			});
 			sgMail.send(msg);
-			console.log(msg);
+			//console.log(msg);
 					}
 					for (var d in doc3)
 			{
 						if(doc3[d].email != JSON.stringify(tradesd)){
-							console.log('dif');
+							//console.log('dif');
 													const sgMail = require('@sendgrid/mail');
 
 							sgMail.setApiKey(process.env.SENDGRID_API_KEY);
@@ -349,13 +351,13 @@ function tradesdupdate(tradesd,collection){
 								'email': JSON.stringify(tradesd)
 							}, function(err, res) {
 								if (err) console.log(err);
-								//console.log(res.result);
+								////console.log(res.result);
 							});
 							sgMail.send(msg);
 						}
 			
 					}else {
-						console.log('same');
+						//console.log('same');
 					}
 					}
 				});
@@ -374,7 +376,7 @@ app.get('/', function(req, res) {
 });
 
             app.listen(process.env.PORT || 8080, function() {});
-						//console.log('2');
+						////console.log('2');
 poloniex.subscribe('ticker');
 //poloniex.subscribe('BTC_ETC');
  var vols = [];
@@ -391,7 +393,7 @@ poloniex.subscribe('ticker');
 			 bases.push(base);
 		 }
 	 }
-	 //console.log(bases);
+	 ////console.log(bases);
 	 for (var base in bases){
 		 basePairs[bases[base]] = []
 	 }
@@ -403,7 +405,7 @@ poloniex.subscribe('ticker');
 	 }
 	 var volTot = 0;
 	 var count = 0;
-	// //console.logbasePairs);
+	// ////console.logbasePairs);
 	for (var p in basePairs){
 		for (var a in basePairs[p]){
 			
@@ -424,9 +426,9 @@ poloniex.subscribe('ticker');
 		count++;
 		}
 	}
-	//console.log(volTot);
-	//console.log(count);
-	//console.log('avg vol: ' + volTot / count);
+	////console.log(volTot);
+	////console.log(count);
+	////console.log('avg vol: ' + volTot / count);
 	var avg = volTot / count;
 	var winners = [];
 	for (var p in basePairs){
@@ -455,8 +457,8 @@ poloniex.subscribe('ticker');
 		}
 		
 	}
-	//console.log(winners);
-	//console.log(winners.length);
+	////console.log(winners);
+	////console.log(winners.length);
 	for (var p in winners){
 		var avg = ((parseFloat(winners[p]['24hrHigh']) + parseFloat(winners[p]['24hrLow'])) / 2);
 		
@@ -545,7 +547,7 @@ poloniex.subscribe('ticker');
 		
 	},
 	function(err, result) {
-		//console.log(result.result);
+		////console.log(result.result);
 	});
 	}
 					}
@@ -553,14 +555,14 @@ poloniex.subscribe('ticker');
 				}
  function subs(currencyPair){
 	 setTimeout(function(){
-					//	//console.log('3');
+					//	////console.log('3');
 					poloniex.subscribe(currencyPair);
 					}, Math.random() *120000);
  }
  
  function insert(wp, collection){
-	 //console.log(wp);
-	console.log('insert');
+	 ////console.log(wp);
+	//console.log('insert');
 	 collection.update({
 		'trades.currencyPair': wp.currencyPair
 	},{
@@ -578,16 +580,16 @@ poloniex.subscribe('ticker');
 				if (err) console.log(err);
 				
 			if (wp.currencyPair == "BTC_BCH"){
-				//console.log(wp);
+				////console.log(wp);
 			}
-			  //console.log(res.result);
+			  ////console.log(res.result);
 			}); 
 		} else {
 			if (wp.currencyPair == "BTC_BCH"){
-				//console.log(wp);
+				////console.log(wp);
 			}
-			//console.log(wp);
-		//console.log(result.result);
+			////console.log(wp);
+		////console.log(result.result);
 		}
 	});
  }
@@ -623,14 +625,14 @@ poloniex.subscribe('ticker');
 				if (err) console.log(err);
 				
 			if (currencyPair == "BTC_BCH"){
-				//console.log(ask);
+				////console.log(ask);
 			}
-			  //console.log(res.result);
+			  ////console.log(res.result);
 			}); */
 		} else {
-				//console.log(ask);
-			//console.log(ask);
-		//console.log(result.result);
+				////console.log(ask);
+			////console.log(ask);
+		////console.log(result.result);
 		}
 	});
 						}
@@ -658,7 +660,7 @@ MongoClient.connect(process.env.mongodb || mongodb, function(err, db) {
 			}, function(err, res) {
 				if (err) console.log(err);
 				
-			  console.log(res.result);
+			  //console.log(res.result);
 			}); 
 	} */
 					poloniex.returnOpenOrders('all', function(err, data) {
@@ -694,8 +696,8 @@ MongoClient.connect(process.env.mongodb || mongodb, function(err, db) {
 									
 								}
 							}
-							console.log('ds: ');
-							console.log(ds);
+							//console.log('ds: ');
+							//console.log(ds);
 							var dsinc = 0
 							if (doc3[d].trades.currencyPair){
 								if (ds.includes(doc3[d].trades.currencyPair)){
@@ -722,11 +724,11 @@ MongoClient.connect(process.env.mongodb || mongodb, function(err, db) {
 						function(err, result) {
 
 							if (err) console.log(err);
-							console.log(result.result);
+							//console.log(result.result);
 							if (result.result.nModified == 0) {
 
 							} else {
-								console.log(result.result);
+								//console.log(result.result);
 							}
 						});
 								}
@@ -737,8 +739,8 @@ MongoClient.connect(process.env.mongodb || mongodb, function(err, db) {
 				});
 		}
 		
-        //console.log(dbs);
-						//console.log('settimeout');
+        ////console.log(dbs);
+						////console.log('settimeout');
                 setInterval(function() {
                     doCollections(collections);
                 }, 7500);
@@ -749,17 +751,17 @@ MongoClient.connect(process.env.mongodb || mongodb, function(err, db) {
  function dobuy(d3d, cc, amount){
 	 poloniex.buy(d3d.trades.currencyPair, parseFloat(d3d.trades.buy1).toFixed(8), amount.toFixed(8), 0, 0, 0 , function (err, data2){
 		 console.log(err)
-		console.log(data2);
+		//console.log(data2);
 		var collection =dbo.collection( 'orders' )
 			collection.insertOne({
 				'on': parseFloat(data2.orderNumber)
 			}, function(err, res) {
 				if (err) console.log(err);
 				
-			  //console.log(res.result);
+			  ////console.log(res.result);
 			}); 
 		poloniex.sell(d3d.trades.currencyPair, parseFloat(d3d.trades.sell1).toFixed(8), (amount * .998).toFixed(8), 0, 0, 0 , function (err, data3){
-		console.log(data3);
+		//console.log(data3);
 		console.log(err);
 		var collection =dbo.collection( 'orders' )
 			collection.insertOne({
@@ -767,7 +769,7 @@ MongoClient.connect(process.env.mongodb || mongodb, function(err, db) {
 			}, function(err, res) {
 				if (err) console.log(err);
 				
-			  //console.log(res.result);
+			  ////console.log(res.result);
 			}); 
 
 	});
@@ -778,7 +780,7 @@ var orders = []
 
  function dobuy2(d3d, cc, amount){
 	 poloniex.buy(d3d.trades.currencyPair, parseFloat(d3d.trades.buy2).toFixed(8), amount.toFixed(8), 0, 0, 0 , function (err, data2){
-		console.log(data2);
+		//console.log(data2);
 		console.log(err);
 		var collection =dbo.collection( 'orders' )
 			collection.insertOne({
@@ -786,17 +788,17 @@ var orders = []
 			}, function(err, res) {
 				if (err) console.log(err);
 				
-			  //console.log(res.result);
+			  ////console.log(res.result);
 			}); 
 		poloniex.sell(d3d.trades.currencyPair, parseFloat(d3d.trades.sell2).toFixed(8), (amount * .998).toFixed(8), 0, 0, 0 , function (err, data3){
-			console.log(data3);
+			//console.log(data3);
 			var collection =dbo.collection( 'orders' )
 			collection.insertOne({
 				'on': parseFloat(data3.orderNumber)
 			}, function(err, res) {
 				if (err) console.log(err);
 				
-			  //console.log(res.result);
+			  ////console.log(res.result);
 			}); 
 			console.log(err);
 			
@@ -817,7 +819,7 @@ function cancel(d3d, cc, balance){
 			function(err, result) {
 
 				if (err) console.log(err);
-				//console.log(result.result);
+				////console.log(result.result);
 				if (result.result.nModified == 0) {
 
 					cc.insertOne({
@@ -845,7 +847,7 @@ function cancel(d3d, cc, balance){
 			function(err, result) {
 
 				if (err) console.log(err);
-				//console.log(result.result);
+				////console.log(result.result);
 				if (result.result.nModified == 0) {
 
 					cc.insertOne({
@@ -873,7 +875,7 @@ function cancel(d3d, cc, balance){
 	function(err, result) {
 
 		if (err) console.log(err);
-		//console.log(result.result);
+		////console.log(result.result);
 		if (result.result.nModified == 0) {
 
 		} else {
@@ -884,29 +886,29 @@ function cancel(d3d, cc, balance){
 function doCollections(collections, balances){
 							
 							
-						//console.log('8'); 
+						////console.log('8'); 
     poloniex.returnBalances(function(err, balances) {
 				poloniex.returnOpenOrders('all', function(err, data) {
 					var ts = Math.round(new Date().getTime() / 1000) - 1000;
 					var tsHour = ts - (30 * 60) - 1000;
-					//console.log(tsHour);
+					////console.log(tsHour);
 						for (var d in data){
 								if (data[d].length > 0){
 									for (var a in data[d]){
 										data[d][a].pair = d;
-										//console.log(data[d][a].type);
+										////console.log(data[d][a].type);
 										if (data[d][a].type == "buy"){
 										data[d][a].currentBid = bestBid[data[d][a].pair];
 										var date = new Date(data[d][a].date).getTime() / 1000;
-											//console.log(date); 
-										var date2 = startDate.getTime() / 1000;
+											////console.log(date); 
+										var date2 = startDateTrades.getTime() / 1000;
 										if (date <= tsHour && date >= date2){
-											//console.log(parseFloat(data[d][a].orderNumber));
-											//console.log('cancel cancel!');
+											////console.log(parseFloat(data[d][a].orderNumber));
+											////console.log('cancel cancel!');
 											
 											
 											poloniex.cancelOrder(parseFloat(data[d][a].orderNumber), function(data){
-												//console.log('cancelled');
+												////console.log('cancelled');
 											});
 											
 											
@@ -918,14 +920,14 @@ function doCollections(collections, balances){
 							}
 							
         if (err) {
-            //console.log(err.message);
+            ////console.log(err.message);
 			
 
                 setTimeout(function() {
                     doCollections(collections);
                 }, 7500);
         } else {
-            //console.log(balances.BTC);
+            ////console.log(balances.BTC);
 			
 			var btc = parseFloat(balances.BTC) / 32;
 			if (btc < 0.0001){
@@ -967,11 +969,11 @@ function collectionDo(collection, data, balances, btc){
 								if (doc3[d].trades.buy2){
 								if (doc3[d].trades.bought1 == true && doc3[d].trades.bought2 == true && !ds.includes(doc3[d].trades.currencyPair)){
 									if (doc3[d].trades.bought1 == true){
-									//console.log('bought1 and bought2 true');
+									////console.log('bought1 and bought2 true');
 								}
 								if (!ds.includes(doc3[d].trades.currencyPair)){
-									//console.log('ds no include ' + doc3[d].trades.currencyPair);
-									//console.log(ds);
+									////console.log('ds no include ' + doc3[d].trades.currencyPair);
+									////console.log(ds);
 								}
 									doc3[d].trades.bought1 = false;
 									doc3[d].trades.bought2 = false;
@@ -983,7 +985,7 @@ function collectionDo(collection, data, balances, btc){
 									}, { multi: true },
 									function(err, result) {
 									   console.log(err);
-										//console.log(result.result);
+										////console.log(result.result);
 									godobuy = true;
 															
 
@@ -993,7 +995,7 @@ function collectionDo(collection, data, balances, btc){
 							
 						if (doc3[d].trades.currencyPair.substr(0, doc3[d].trades.currencyPair.indexOf('_')) == "BTC"){
 						var amount = btc / parseFloat(doc3[d].trades.lowestAsk);
-                         //console.log(amount);
+                         ////console.log(amount);
 						if (parseFloat(doc3[d].trades.lowestAsk) <= doc3[d].trades.sl && doc3[d].trades.bought1 == true && doc3[d].trades.cancelled == false){
 							//cancel(doc3[d], collections[c], balances[doc3[d].trades.currencyPair.substr(doc3[d].trades.currencyPair.indexOf('_'), doc3[d].trades.currencyPair.length)]);
 						}
@@ -1001,19 +1003,19 @@ function collectionDo(collection, data, balances, btc){
 							//cancel2(doc3[d], collections[c],  balances[doc3[d].trades.currencyPair.substr(doc3[d].trades.currencyPair.indexOf('_'), doc3[d].trades.currencyPair.length)]);
 						}
 						
-						//console.log(doc3[d].trades.currencyPair);
-						//console.log(doc3[d].trades);
+						////console.log(doc3[d].trades.currencyPair);
+						////console.log(doc3[d].trades);
 						if (doc3[d].trades.bought1 == false){
                         if (parseFloat(doc3[d].trades.lowestAsk) <= doc3[d].trades.buy1 && parseFloat(doc3[d].trades.lowestAsk) > 0.00000200) {
                         var amount = btc / parseFloat(doc3[d].trades.lowestAsk);
-                            //console.log(doc3[d].trades.last);
-							//console.log(doc3[d].trades);
+                            ////console.log(doc3[d].trades.last);
+							////console.log(doc3[d].trades);
 							doc3[d].trades.bought1 = true;
 							if (godobuy == true){
 								godobuy = false;
 
-							console.log('dobuy: ' +  amount);
-							//console.log(doc3[d]);
+							//console.log('dobuy: ' +  amount);
+							////console.log(doc3[d]);
 							collection.update({
 								}, {
 									$set: {
@@ -1022,7 +1024,7 @@ function collectionDo(collection, data, balances, btc){
 								}, { multi: true },
 								function(err, result) {
 								   console.log(err);
-									//console.log(result.result);
+									////console.log(result.result);
 								godobuy = true;
 														
 
@@ -1034,8 +1036,8 @@ function collectionDo(collection, data, balances, btc){
                         if (doc3[d].trades.buy2) {
                             if (parseFloat(doc3[d].trades.lowestAsk) <= doc3[d].trades.buy2 && doc3[d].trades.bought2 == false && parseFloat(doc3[d].trades.lowestAsk) > 0.00000200) {
                         var amount = btc / parseFloat(doc3[d].trades.lowestAsk);
-							//console.log(doc3[d].trades.last);
-							//console.log(doc3[d].trades);
+							////console.log(doc3[d].trades.last);
+							////console.log(doc3[d].trades);
 							doc3[d].trades.bought2 = true;
 														if (godobuy == true){
 godobuy = false;
@@ -1047,12 +1049,12 @@ godobuy = false;
 								}, { multi: true },
 								function(err, result) {
 								   console.log(err);
-									//console.log(result.result);
+									////console.log(result.result);
 								godobuy = true;
 														
 
 								});
-							console.log('dobuy2: ' +  amount);
+							//console.log('dobuy2: ' +  amount);
 							dobuy2(doc3[d], collection, amount);
                             }
 							}
@@ -1063,9 +1065,9 @@ godobuy = false;
 					
 					if (count + 1 <= collections.length - 1){
 						count++;
-						//console.log(count);
+						////console.log(count);
 					}else {
-						//console.log('settimeout');
+						////console.log('settimeout');
                
 					
 					}}
@@ -1075,7 +1077,7 @@ var dbo;
 				MongoClient.connect(process.env.mongodb || mongodb, function(err, db) {
 					console.log(err);
 				dbo = db.db('polomonster138-test21112322')
-				//console.log('dbo');
+				////console.log('dbo');
 				
 				});
 poloniex.on('message', (channelName, data, seq) => {
@@ -1084,18 +1086,18 @@ poloniex.on('message', (channelName, data, seq) => {
 	  
 	  
 	var obj = JSON.parse(JSON.stringify(data));
-	//console.log(obj);
+	////console.log(obj);
 	if (obj.currencyPair == "BTC_ETH"){
 		btceth = obj.last;
-		//console.log('eth: ' + btceth);
+		////console.log('eth: ' + btceth);
 	}
 	else if (obj.currencyPair == "BTC_XMR"){
 		btcxmr = obj.last;
-		//console.log('xmr: ' + btcxmr);
+		////console.log('xmr: ' + btcxmr);
 	}
 	else if (obj.currencyPair == "USDT_BTC"){
 		btcusdt = obj.last;
-		//console.log('usdt: ' + btcusdt);
+		////console.log('usdt: ' + btcusdt);
 	}
 	if (!pairs.includes(obj.currencyPair)){
 	vols.push(obj); 
@@ -1103,7 +1105,7 @@ poloniex.on('message', (channelName, data, seq) => {
 	}/*
 	
 		*/
-		//console.log(vols.length);
+		////console.log(vols.length);
 		if (vols.length > 20 && msgcount > 30){ // prod 50
 		msgcount = 0;
 		doVols = true;
@@ -1116,8 +1118,8 @@ poloniex.on('message', (channelName, data, seq) => {
 		 
 			 var collection = dbo.collection(channelName);
 		 if (data[0].type =='orderBook'){
-			 //console.log(Object.keys(data[0].data.asks)[0]);
-			 //console.log(Object.keys(data[0].data.bids)[0]);
+			 ////console.log(Object.keys(data[0].data.asks)[0]);
+			 ////console.log(Object.keys(data[0].data.bids)[0]);
 			 bestAsk[channelName] = Object.keys(data[0].data.asks)[0];
 			 bestBid[channelName] = Object.keys(data[0].data.bids)[0];
 		
@@ -1150,22 +1152,22 @@ poloniex.on('message', (channelName, data, seq) => {
 	}
  
   if (channelName === 'BTC_ETC') {
-    //console.log(`order book and trade updates received for currency pair ${channelName}`);
-    //console.log(`data sequence number is ${seq}`);
+    ////console.log(`order book and trade updates received for currency pair ${channelName}`);
+    ////console.log(`data sequence number is ${seq}`);
   }
 });
  
 poloniex.on('open', () => {
-  //console.log(`Poloniex WebSocket connection open`);
+  ////console.log(`Poloniex WebSocket connection open`);
 });
  
 poloniex.on('close', (reason, details) => {
- //console.log(`Poloniex WebSocket connection disconnected`);
+ ////console.log(`Poloniex WebSocket connection disconnected`);
 });
  
 poloniex.on('error', (error) => {
-//console.log(`An error has occured`);
- //console.log(error);
+////console.log(`An error has occured`);
+ ////console.log(error);
 });
 
 setTimeout(function(){
