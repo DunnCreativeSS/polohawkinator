@@ -215,9 +215,9 @@ collection.find({
 		for (var t in totals){
 			thetotal+=totals[t].total;
 		}
-		thetotal = thetotal - 0.01355211
-thetotal = thetotal - 0.00074247
-thetotal = thetotal - 0.00494003
+		thetotal = thetotal + 0.01355211
+thetotal = thetotal + 0.00074247
+thetotal = thetotal + 0.00494003
 		if (gosend == true){
 			gosend = false;
 		thetotal = thetotal * Math.pow(10, 8);
