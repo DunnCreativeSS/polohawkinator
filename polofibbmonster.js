@@ -85,7 +85,7 @@ function doget(req, res){
 							}
 						if (doc3[d].trades.bought1 == false){
 							if (doc3[d].trades.currencyPair.substr(0, doc3[d].trades.currencyPair.indexOf('_')) == "BTC" && parseFloat(doc3[d].trades.lowestAsk) > 0.00000200){
-							var sl = {'bought1' : doc3[d].trades.bought1,'bought2' : doc3[d].trades.bought2,  'pair' : doc3[d].trades.currencyPair, 'stoplimit': doc3[d].trades.buy1, 'currentAsk': doc3[d].trades.lowestAsk, 'percent': (parseFloat(doc3[d].trades.lowestAsk) / parseFloat(doc3[d].trades.buy1))}
+							var sl = {'sats': Math.floor((doc3[d].trades.lowestAsk - doc3[d].trades.buy1) * Math.pow(10, 8)), 'bought1' : doc3[d].trades.bought1,'bought2' : doc3[d].trades.bought2,  'pair' : doc3[d].trades.currencyPair, 'stoplimit': doc3[d].trades.buy1, 'currentAsk': doc3[d].trades.lowestAsk, 'percent': (parseFloat(doc3[d].trades.lowestAsk) / parseFloat(doc3[d].trades.buy1))}
 							stoplimits.push(sl);
 							}
 						}
@@ -93,7 +93,7 @@ function doget(req, res){
 							if (doc3[d].trades.buy2 != undefined){
 								if (doc3[d].trades.currencyPair.substr(0, doc3[d].trades.currencyPair.indexOf('_')) == "BTC" && parseFloat(doc3[d].trades.lowestAsk) > 0.00000200){
 
-							var sl = {'bought1' : doc3[d].trades.bought1,'bought2' : doc3[d].trades.bought2, 'pair' : doc3[d].trades.currencyPair, 'stoplimit': doc3[d].trades.buy2, 'currentAsk': doc3[d].trades.lowestAsk, 'percent': (parseFloat(doc3[d].trades.lowestAsk) / parseFloat(doc3[d].trades.buy2))}
+							var sl = {'sats': Math.floor((doc3[d].trades.lowestAsk - doc3[d].trades.buy2) * Math.pow(10, 8)), 'bought1' : doc3[d].trades.bought1,'bought2' : doc3[d].trades.bought2, 'pair' : doc3[d].trades.currencyPair, 'stoplimit': doc3[d].trades.buy2, 'currentAsk': doc3[d].trades.lowestAsk, 'percent': (parseFloat(doc3[d].trades.lowestAsk) / parseFloat(doc3[d].trades.buy2))}
 							
 							stoplimits.push(sl);
 								}
@@ -140,7 +140,7 @@ collection.find({
 										data[d][a].pair = d;
 										data[d][a].currentBid = bestBid[data[d][a].pair];
 										data[d][a].percent = (parseFloat(data[d][a].currentBid) / parseFloat(data[d][a].rate));
-										data[d][a].sats = (data[d][a].rate - data[d][a].currentBid) * Math.pow(10, 8);
+										data[d][a].sats = Math.floor((data[d][a].rate - data[d][a].currentBid) * Math.pow(10, 8));
 										orders.push(data[d][a]);
 										//console.log(thetotal);
 										//console.log(data[d][a].type );
