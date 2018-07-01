@@ -73,9 +73,12 @@ function doget(req, res){
 						
 						//console.log(doc3[d].trades);
 						if (doc3[d].trades){
+							if (doc3[d].trades.currencyPair == "BTC_DASH"){
+								console.log(doc3[d].trades);
+							}
 						if (doc3[d].trades.bought1 == false){
 							if (doc3[d].trades.currencyPair.substr(0, doc3[d].trades.currencyPair.indexOf('_')) == "BTC" && parseFloat(doc3[d].trades.lowestAsk) > 0.00000200){
-							var sl = {'pair' : doc3[d].trades.currencyPair, 'stoplimit': doc3[d].trades.buy1, 'currentAsk': doc3[d].trades.lowestAsk, 'percent': (parseFloat(doc3[d].trades.lowestAsk) / parseFloat(doc3[d].trades.buy1))}
+							var sl = {'bought1' : doc3[d].trades.bought1,'bought2' : doc3[d].trades.bought2,  'pair' : doc3[d].trades.currencyPair, 'stoplimit': doc3[d].trades.buy1, 'currentAsk': doc3[d].trades.lowestAsk, 'percent': (parseFloat(doc3[d].trades.lowestAsk) / parseFloat(doc3[d].trades.buy1))}
 							stoplimits.push(sl);
 							}
 						}
@@ -83,7 +86,7 @@ function doget(req, res){
 							if (doc3[d].trades.buy2 != undefined){
 								if (doc3[d].trades.currencyPair.substr(0, doc3[d].trades.currencyPair.indexOf('_')) == "BTC" && parseFloat(doc3[d].trades.lowestAsk) > 0.00000200){
 
-							var sl = {'pair' : doc3[d].trades.currencyPair, 'stoplimit': doc3[d].trades.buy2, 'currentAsk': doc3[d].trades.lowestAsk, 'percent': (parseFloat(doc3[d].trades.lowestAsk) / parseFloat(doc3[d].trades.buy2))}
+							var sl = {'bought1' : doc3[d].trades.bought1,'bought2' : doc3[d].trades.bought2, 'pair' : doc3[d].trades.currencyPair, 'stoplimit': doc3[d].trades.buy2, 'currentAsk': doc3[d].trades.lowestAsk, 'percent': (parseFloat(doc3[d].trades.lowestAsk) / parseFloat(doc3[d].trades.buy2))}
 							
 							stoplimits.push(sl);
 								}
