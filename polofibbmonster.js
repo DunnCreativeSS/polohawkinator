@@ -895,8 +895,8 @@ function doCollections(collections, balances){
 						////console.log('8'); 
     poloniex.returnBalances(function(err, balances) {
 				poloniex.returnOpenOrders('all', function(err, data) {
-					var ts = Math.round(new Date().getTime() / 1000) - 1000;
-					var tsHour = ts - (30 * 60) - 1000;
+					var ts = Math.round(new Date().getTime() / 1000);
+					var tsHour = ts - (30 * 60);
 					////console.log(tsHour);
 						for (var d in data){
 								if (data[d].length > 0){
