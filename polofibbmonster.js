@@ -761,7 +761,8 @@ MongoClient.connect(process.env.mongodb || mongodb, function(err, db) {
 				'on': parseFloat(data2.orderNumber)
 			}, function(err, res) {
 				if (err) console.log(err);
-				
+												godobuy = true;
+
 			  ////console.log(res.result);
 			}); 
 		poloniex.sell(d3d.trades.currencyPair, parseFloat(d3d.trades.sell1).toFixed(8), (amount * .998).toFixed(8), 0, 0, 0 , function (err, data3){
@@ -791,7 +792,8 @@ var orders = []
 				'on': parseFloat(data2.orderNumber)
 			}, function(err, res) {
 				if (err) console.log(err);
-				
+												godobuy = true;
+
 			  ////console.log(res.result);
 			}); 
 		poloniex.sell(d3d.trades.currencyPair, parseFloat(d3d.trades.sell2).toFixed(8), (amount * .998).toFixed(8), 0, 0, 0 , function (err, data3){
@@ -1029,7 +1031,7 @@ function collectionDo(collection, data, balances, btc){
 								function(err, result) {
 								   console.log(err);
 									////console.log(result.result);
-								godobuy = true;
+								
 														
 
 								});
@@ -1054,7 +1056,6 @@ godobuy = false;
 								function(err, result) {
 								   console.log(err);
 									////console.log(result.result);
-								godobuy = true;
 														
 
 								});
