@@ -906,11 +906,16 @@ function doCollections(collections, balances){
 										if (data[d][a].type == "buy"){
 										data[d][a].currentBid = bestBid[data[d][a].pair];
 										var date = new Date(data[d][a].date).getTime() / 1000;
-											////console.log(date); 
+											console.log(d);
+											console.log(date); 
+											console.log('less than?');
+											console.log(tsHour);
+											console.log('more than?');
 										var date2 = startDateTrades.getTime() / 1000;
+											console.log(date2)
 										if (date <= tsHour && date >= date2){
-											////console.log(parseFloat(data[d][a].orderNumber));
-											////console.log('cancel cancel!');
+											console.log(parseFloat(data[d][a].orderNumber));
+											console.log('cancel cancel!');
 											
 											
 											poloniex.cancelOrder(parseFloat(data[d][a].orderNumber), function(data){
