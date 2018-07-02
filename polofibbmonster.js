@@ -12,8 +12,8 @@ const express = require('express');
 var startDate = new Date('2018/07/01 22:28')
 var favicon = require('serve-favicon')
 var path = require('path')
- var startBtc = 1300762.7610000018; //0.00796575 
- var startBtcliq =1199331.0197498342; //0.00796575 
+ var startBtc = 1820228.2340000002; //0.00796575 
+ var startBtcliq =1713573.370357628; //0.00796575 
 var app = express()
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
 	function sortFunction3(a,b){  
@@ -239,12 +239,12 @@ ttotal = ttotal + 0.00494003
 		thetotal = thetotal * Math.pow(10, 8);
 		tradetotal = tradetotal * Math.pow(10, 8);
 		ttotal = ttotal * Math.pow(10, 8);
-		var percent =  (100 * (-1 * (1 - (( ttotal + tradetotal) / startBtc)))).toFixed(4);
+		var percent =  (100 * (-1 * (1 - (( ttotal) / startBtc)))).toFixed(4);
 		var diff2 = Math.abs(new Date() - startDate);
 		var minutes = Math.floor((diff2/1000)/60);
 		var hours = ((diff2/1000)/60 / 60).toFixed(8);
 		var percentHr = (percent / hours).toFixed(4);
-		var percent2 =  (100 * (-1 * (1 - (( thetotal + tradetotal) / startBtcliq)))).toFixed(4);
+		var percent2 =  (100 * (-1 * (1 - (( thetotal) / startBtcliq)))).toFixed(4);
 		var percentHr2 = (percent2 / hours).toFixed(4);
 		res.send('<head><link rel="icon" href="https://polofibbmonster.herokuapp.com/favicon.ico?v=2" /><meta http-equiv="refresh" content="36"><script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script></head><h1>Don\'t Panic! If the data seems off, wait a minute or so.</h1>'
 		+ 'current time: ' + new Date()
