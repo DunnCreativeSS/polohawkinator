@@ -530,7 +530,7 @@ poloniex.subscribe('ticker');
 							dont=true;
 						}
 					}
-					if (dont == fase){
+					if (dont == false){
 					insert(winners[p], collection);
 					}
 				});
