@@ -671,7 +671,7 @@ var outstandingorders = [181053472317, 181053518271, 53366865899, 158516233209, 
 setTimeout(function(){
 MongoClient.connect(process.env.mongodb || mongodb, function(err, db) {
 	console.log(err);
-    var dbo = db.db(thedatabase)
+    var dbo = db.db(process.env.thedatabase)
 	var count = 0; //insert( 
 	
 	var collection =dbo.collection( 'orders' )
@@ -1103,7 +1103,7 @@ godobuy = false;
 var dbo;
 				MongoClient.connect(process.env.mongodb || mongodb, function(err, db) {
 					console.log(err);
-				dbo = db.db(thedatabase)
+				dbo = db.db(process.env.thedatabase)
 				////console.log('dbo');
 				
 				});
