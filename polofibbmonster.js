@@ -515,8 +515,25 @@ poloniex.subscribe('ticker');
 					if (!winnas.includes(winners[p].currencyPair)){
 						winnas.push(winners[p].currencyPair);
 											
-					
-				//insert(winners[p], collection);
+					 
+		collection.find({
+
+                }, {
+                    $exists: true
+                }).sort({
+                    _id: -1
+
+                }).toArray(function(err, doc3) {
+					var dont = false;
+                    for (var d in doc3) {
+						if (doc3[d].trades.k == winners[p].k){
+							dont=true;
+						}
+					}
+					if (dont == fase){
+					insert(winners[p], collection);
+					}
+				});
 					}
 					updateStoplimits(winners[p], collection);
 							}
@@ -566,7 +583,7 @@ poloniex.subscribe('ticker');
  
  function insert(wp, collection){
 	 ////console.log(wp);
-	//console.log('insert');
+	console.log('insert');
 	 collection.update({
 		'trades.currencyPair': wp.currencyPair
 	},{
@@ -654,9 +671,9 @@ var outstandingorders = [181053472317, 181053518271, 53366865899, 158516233209, 
 setTimeout(function(){
 MongoClient.connect(process.env.mongodb || mongodb, function(err, db) {
 	console.log(err);
-    var dbo = db.db('polomonster138-test21112322')
+    var dbo = db.db(thedatabase)
 	var count = 0; //insert( 
-	/*
+	
 	var collection =dbo.collection( 'orders' )
 	for (var d in outstandingorders){
 			collection.insertOne({
@@ -666,7 +683,7 @@ MongoClient.connect(process.env.mongodb || mongodb, function(err, db) {
 				
 			  //console.log(res.result);
 			}); 
-	} */
+	} 
 					poloniex.returnOpenOrders('all', function(err, data) {
 
     dbo.listCollections().toArray(function(err, collInfos) {
@@ -1086,7 +1103,7 @@ godobuy = false;
 var dbo;
 				MongoClient.connect(process.env.mongodb || mongodb, function(err, db) {
 					console.log(err);
-				dbo = db.db('polomonster138-test21112322')
+				dbo = db.db(thedatabase)
 				////console.log('dbo');
 				
 				});
