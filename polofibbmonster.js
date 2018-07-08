@@ -526,9 +526,13 @@ poloniex.subscribe('ticker');
                 }).toArray(function(err, doc3) {
 					var dont = false;
                     for (var d in doc3) {
+						if (doc3[d].trades){
 						if (doc3[d].trades.k == winners[p].k){
 							dont=true;
-						}
+						}}
+						else{
+					dont=true		
+					}
 					}
 					if (dont == false){
 					insert(winners[p], collection);
